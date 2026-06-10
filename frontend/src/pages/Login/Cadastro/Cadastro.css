@@ -1,0 +1,111 @@
+/* ── Cadastro page ── */
+.cadastro-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+}
+
+.cadastro-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, #7c6af71a 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 24px 64px #0008;
+  animation: fadeUp .4s ease both;
+  position: relative;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.back {
+  font-size: 12px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.back:hover { opacity: .7; }
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.sub {
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.error-msg {
+  font-size: 11px;
+  color: var(--danger);
+  align-self: flex-start;
+  margin-top: -10px;
+}
+
+/* ── Sucesso ── */
+.success-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.success-icon {
+  font-size: 52px;
+  animation: pop .4s cubic-bezier(.175, .885, .32, 1.275) both;
+}
+
+@keyframes pop {
+  from { transform: scale(0); }
+  to   { transform: scale(1); }
+}
+
+.btn-success {
+  width: 100%;
+  background: var(--success);
+  color: #0f0f14;
+}
+.btn-success:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  width: 100%;
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover { background: #9480ff; }

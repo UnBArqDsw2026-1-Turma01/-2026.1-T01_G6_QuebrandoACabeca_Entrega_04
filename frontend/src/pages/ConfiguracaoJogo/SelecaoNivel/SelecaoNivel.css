@@ -1,0 +1,322 @@
+/* ── Reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Body / Layout ── */
+.ls-body {
+  background: var(--bg);
+  font-family: var(--font);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;           /* Adicione */
+  padding: 0;          /* Adicione */
+}
+
+/* ── Header ── */
+.ls-header {
+  background: #0f0f14dd;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;   /* Reduza de 14px para 8px */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.ls-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ls-logo {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.ls-back {
+  font-size: 13px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.ls-back:hover {
+  opacity: 0.7;
+}
+
+/* ── Main Layout ── */
+.ls-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  margin-top: 0;       /* Adicione */
+  padding-top: 0;      /* Adicione */
+}
+
+.ls-content {
+  flex: 1;
+  padding: 0 24px 0 24px;  /* Sem padding superior */
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;  /* Adicione - alinha conteúdo no topo */
+  margin-top: 0px;                /* Adicione */
+}
+
+.ls-content-title {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: -17px;
+  margin-top: 30px;   /* Apenas um pequeno espaçamento do topo */
+  width: 100%;
+}
+
+/* ── Level Grid ── */
+.ls-level-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* ── Base Card ── */
+.level-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  width: 150px;
+  flex-shrink: 0;
+}
+
+.level-card:hover:not(.locked):not(.soon) {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px #7c6af720;
+}
+
+.level-card.selected {
+  border-color: var(--accent);
+  background: #7c6af711;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px #7c6af730;
+}
+
+.level-thumb {
+  height: 70px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.level-name {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.level-card.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Upload Card ── */
+.level-card.upload-card {
+  border: 2px dashed var(--border);
+  background: transparent;
+}
+
+.level-card.upload-card:hover {
+  border-color: var(--accent2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px #f0a50018;
+}
+
+.level-card.upload-card.selected {
+  border-color: var(--accent2);
+  border-style: solid;
+  background: #f0a50009;
+  box-shadow: 0 8px 28px #f0a50025;
+}
+
+.upload-card .level-thumb {
+  background: transparent;
+  font-size: 28px;
+}
+
+.upload-label {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+/* ── Em Breve Card ── */
+.level-card.soon {
+  cursor: default;
+  opacity: 0.55;
+  border-style: dashed;
+}
+
+.level-card.soon:hover {
+  border-color: var(--border);
+  transform: none;
+  box-shadow: none;
+}
+
+.soon .level-thumb {
+  background: transparent;
+  font-size: 22px;
+}
+
+.badge-soon {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  background: #f0a50018;
+  color: var(--accent2);
+  border: 1px solid #f0a50044;
+}
+
+/* ── Badges ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.badge-success {
+  background: #34c98a22;
+  color: var(--success);
+  border: 1px solid #34c98a44;
+}
+
+.badge-accent {
+  background: #7c6af722;
+  color: var(--accent);
+  border: 1px solid #7c6af744;
+}
+
+.badge-danger {
+  background: #f05c5c22;
+  color: var(--danger);
+  border: 1px solid #f05c5c44;
+}
+
+/* ── Popup Flutuante ── */
+.card-popup {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.card-popup.show {
+  pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.popup-inner {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 20px 60px #00000070, 0 0 0 1px #ffffff08;
+  white-space: nowrap;
+}
+
+/* ── Seta do popup ── */
+.popup-arrow {
+  position: absolute;
+  top: -6px;
+  width: 12px;
+  height: 6px;
+  background: var(--surface);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  border: 1px solid var(--border);
+}
+
+.popup-label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ── Botões do Popup ── */
+.popup-btn {
+  min-width: 148px;
+  justify-content: center;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s, transform 0.1s;
+  letter-spacing: 0.01em;
+}
+
+.popup-btn:active {
+  transform: scale(0.96);
+}
+
+.popup-btn.primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.popup-btn.primary:hover {
+  background: #9480ff;
+}
+
+.popup-btn.upload {
+  background: var(--accent2);
+  color: #0f0f14;
+}
+
+.popup-btn.upload:hover {
+  background: #ffb830;
+}

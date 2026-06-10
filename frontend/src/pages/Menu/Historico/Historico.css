@@ -1,0 +1,245 @@
+/* ── CSS Variables ── */
+:root {
+  --bg: #0f0f14;
+  --surface: #1a1a24;
+  --card: #22223a;
+  --border: #2e2e4a;
+  --accent: #7c6af7;
+  --accent2: #f0a500;
+  --success: #34c98a;
+  --danger: #f05c5c;
+  --text: #e8e8f0;
+  --muted: #8888aa;
+  --radius: 14px;
+  --font: 'Outfit', sans-serif;
+  --mono: 'Space Mono', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Page ── */
+.hist-page {
+  background: var(--bg);
+  font-family: var(--font);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  inset: 0;
+}
+
+/* ── Header (igual às Configurações) ── */
+.hist-header {
+  background: #0f0f14dd;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.hist-logo {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hist-back {
+  font-size: 13px;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s;
+  background: none;
+  border: none;
+  font-family: var(--font);
+}
+
+.hist-back:hover {
+  opacity: 0.7;
+}
+
+/* ── Main Content (centralizado) ── */
+.hist-content {
+  flex: 1;
+  padding: 28px 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+/* Container centralizado para o conteúdo */
+.hist-container {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hist-page-title {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  text-align: center;
+  width: 100%;
+}
+
+/* ── History List ── */
+.hist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+/* ── History Items (horizontal, similar às configs) ── */
+.hist-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.2s;
+  cursor: pointer;
+  width: 100%;
+}
+
+.hist-item:hover {
+  border-color: var(--accent);
+  background: #22223a;
+  transform: translateX(4px);
+}
+
+.hist-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.hist-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.hist-stars {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.hist-title {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hist-meta {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Button ── */
+.hist-btn {
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font);
+  transition: all 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: var(--accent);
+  color: #fff;
+}
+
+.hist-btn:hover {
+  background: #9480ff;
+}
+
+/* ── Empty State ── */
+.hist-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--muted);
+  text-align: center;
+  padding: 60px 20px;
+  width: 100%;
+}
+
+.hist-empty-icon {
+  font-size: 48px;
+}
+
+.hist-empty-text {
+  font-size: 14px;
+}
+
+.hist-empty-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── Loading State ── */
+.hist-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 12px;
+  color: var(--muted);
+  text-align: center;
+  padding: 60px 20px;
+  width: 100%;
+}
+
+/* ── Keyframes ── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hist-item {
+  animation: fadeUp 0.3s ease both;
+}
+
+.hist-item:nth-child(1) { animation-delay: 0s; }
+.hist-item:nth-child(2) { animation-delay: 0.05s; }
+.hist-item:nth-child(3) { animation-delay: 0.10s; }
+.hist-item:nth-child(4) { animation-delay: 0.15s; }
+.hist-item:nth-child(5) { animation-delay: 0.20s; }
+.hist-item:nth-child(6) { animation-delay: 0.25s; }

@@ -1,0 +1,201 @@
+/* ── CSS Variables ── */
+:root {
+  --bg: #0f0f14;
+  --surface: #1a1a24;
+  --card: #22223a;
+  --border: #2e2e4a;
+  --accent: #7c6af7;
+  --accent2: #f0a500;
+  --success: #34c98a;
+  --danger: #f05c5c;
+  --text: #e8e8f0;
+  --muted: #8888aa;
+  --radius: 14px;
+  --font: 'Outfit', sans-serif;
+  --mono: 'Space Mono', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Body ── */
+.iu-body {
+  background: var(--bg);
+  font-family: var(--font);
+  color: var(--text);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Blurred game background ── */
+.iu-game-bg {
+  position: fixed;
+  inset: 0;
+  filter: blur(3px);
+  opacity: 0.25;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.iu-hud {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.iu-hud-time {
+  font-family: var(--mono);
+  font-size: 16px;
+}
+
+.iu-hud-icon {
+  font-family: var(--mono);
+  color: var(--accent);
+  font-size: 18px;
+}
+
+.iu-hud-hints {
+  font-family: var(--mono);
+  font-size: 16px;
+  color: var(--accent2);
+}
+
+.iu-canvas {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iu-puzzle-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 3px;
+  width: 300px;
+  height: 300px;
+}
+
+.iu-puzzle-piece {
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+/* ── Overlay / Modal ── */
+.iu-overlay {
+  position: fixed;
+  inset: 0;
+  background: #0f0f14bb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+}
+
+.iu-modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 28px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 32px 80px #0009;
+  text-align: center;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.iu-hint-icon {
+  font-size: 40px;
+}
+
+.iu-modal-title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.iu-hint-box {
+  background: #7c6af711;
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.6;
+  width: 100%;
+}
+
+.iu-hint-preview {
+  width: 60px;
+  height: 60px;
+  background: var(--accent2);
+  border-radius: 10px;
+  opacity: 0.9;
+  border: 2px solid var(--accent2);
+  animation: glow 2s infinite;
+}
+
+.iu-hint-counter {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+
+.iu-hint-counter span {
+  color: var(--accent2);
+}
+
+/* ── Buttons ── */
+.iu-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font);
+  transition: all 0.15s;
+}
+
+.iu-btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.iu-btn-primary:hover {
+  background: #9480ff;
+  transform: translateY(-1px);
+}
+
+/* ── Keyframes ── */
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 #f0a50060;
+  }
+  50% {
+    box-shadow: 0 0 16px 4px #f0a50060;
+  }
+}

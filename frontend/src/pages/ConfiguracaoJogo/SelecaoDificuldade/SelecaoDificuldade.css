@@ -1,0 +1,232 @@
+/* ── CSS Variables ── */
+:root {
+  --bg: #0f0f14;
+  --surface: #1a1a24;
+  --card: #22223a;
+  --border: #2e2e4a;
+  --accent: #7c6af7;
+  --accent2: #f0a500;
+  --success: #34c98a;
+  --danger: #f05c5c;
+  --text: #e8e8f0;
+  --muted: #8888aa;
+  --radius: 14px;
+  --font: 'Outfit', sans-serif;
+  --mono: 'Space Mono', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Body ── */
+.ds-body {
+  background: var(--bg);
+  font-family: var(--font);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+.ds-header {
+  background: #0f0f14dd;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ds-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ds-logo {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.ds-back {
+  font-size: 13px;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.ds-back:hover {
+  opacity: 0.7;
+}
+
+/* ── Main ── */
+.ds-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  gap: 28px;
+}
+
+.ds-title {
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.ds-section-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  align-self: flex-start;
+  max-width: 420px;
+  width: 100%;
+}
+
+/* ── Difficulty Grid ── */
+.ds-diff-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.diff-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.diff-card:hover {
+  border-color: var(--accent);
+}
+
+.diff-card.sel {
+  border-color: var(--accent);
+  background: #7c6af711;
+}
+
+.diff-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.diff-label {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.diff-pieces {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── Options Panel ── */
+.ds-options-panel {
+  width: 100%;
+  max-width: 420px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.config-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.config-row:last-child {
+  border: none;
+}
+
+/* ── Toggle ── */
+.toggle {
+  width: 40px;
+  height: 22px;
+  background: var(--accent);
+  border-radius: 11px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.toggle.off {
+  background: var(--border);
+}
+
+.toggle.off::after {
+  left: 3px;
+  right: auto;
+}
+
+.mono-val {
+  font-family: var(--mono);
+  color: var(--accent);
+  font-size: 14px;
+}
+
+/* ── Button ── */
+.ds-btn {
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font);
+  transition: all 0.15s;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #9480ff;
+  transform: translateY(-1px);
+}

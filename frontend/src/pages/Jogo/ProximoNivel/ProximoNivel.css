@@ -1,0 +1,148 @@
+/* ── CSS Variables ── */
+:root {
+  --bg: #0f0f14;
+  --surface: #1a1a24;
+  --card: #22223a;
+  --border: #2e2e4a;
+  --accent: #7c6af7;
+  --accent2: #f0a500;
+  --success: #34c98a;
+  --text: #e8e8f0;
+  --muted: #8888aa;
+  --font: 'Outfit', sans-serif;
+  --mono: 'Space Mono', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Body ── */
+.iu-body {
+  background: var(--bg);
+  font-family: var(--font);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  gap: 28px;
+  position: relative;
+}
+
+.iu-body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, #7c6af71a, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Loading Icon ── */
+.iu-loading-icon {
+  font-size: 56px;
+  display: inline-block;
+  animation: spin 2s linear infinite;
+}
+
+/* ── Titles ── */
+.iu-title {
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  animation: fadeUp 0.4s ease both;
+  animation-delay: 0.1s;
+}
+
+.iu-sub {
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+  animation: fadeUp 0.4s ease both;
+  animation-delay: 0.2s;
+}
+
+/* ── Progress Bar ── */
+.iu-progress-bar {
+  width: 100%;
+  max-width: 280px;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  animation: fadeUp 0.4s ease both;
+  animation-delay: 0.3s;
+}
+
+.iu-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  animation: load 2.2s ease-in-out forwards;
+}
+
+/* ── Next Level Card ── */
+.iu-next-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 24px;
+  text-align: center;
+  max-width: 280px;
+  width: 100%;
+  animation: fadeUp 0.4s ease both;
+  animation-delay: 0.4s;
+}
+
+.iu-next-label {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.iu-next-name {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.iu-next-info {
+  font-size: 12px;
+  color: var(--accent);
+}
+
+/* ── Keyframes ── */
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

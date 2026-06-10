@@ -1,0 +1,290 @@
+/* ── CSS Variables ── */
+:root {
+  --bg: #0f0f14;
+  --surface: #1a1a24;
+  --card: #22223a;
+  --border: #2e2e4a;
+  --accent: #7c6af7;
+  --accent2: #f0a500;
+  --success: #34c98a;
+  --danger: #f05c5c;
+  --text: #e8e8f0;
+  --muted: #8888aa;
+  --radius: 14px;
+  --font: 'Outfit', sans-serif;
+  --mono: 'Space Mono', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Page (igual ao padrão das Configurações) ── */
+.tutorial-page {
+  background: var(--bg);
+  font-family: var(--font);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  inset: 0;
+}
+
+/* ── Header (igual às Configurações) ── */
+.tutorial-header {
+  background: #0f0f14dd;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.tutorial-logo {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tutorial-badge-warn {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  background: #f0a50022;
+  color: var(--accent2);
+  border: 1px solid #f0a50044;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.tutorial-badge-warn:hover {
+  opacity: 0.7;
+}
+
+.tutorial-back {
+  font-size: 13px;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s;
+  background: none;
+  border: none;
+  font-family: var(--font);
+}
+
+.tutorial-back:hover {
+  opacity: 0.7;
+}
+
+/* ── Main Content (scrollável) ── */
+.tutorial-content {
+  flex: 1;
+  padding: 28px 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+/* Container centralizado */
+.tutorial-container {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Dots Navigation ── */
+.tutorial-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.tutorial-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tutorial-dot.active {
+  background: var(--accent);
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* ── Step Container ── */
+.tutorial-step-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Step Card ── */
+.tutorial-step-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  animation: slideIn 0.35s ease both;
+}
+
+.tutorial-step-card.inactive {
+  opacity: 0.45;
+}
+
+.tutorial-step-card.inactive .tutorial-step-num {
+  background: var(--border);
+}
+
+.tutorial-step-num {
+  background: var(--accent);
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.tutorial-step-content h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.tutorial-step-content p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── Step Illustration ── */
+.tutorial-step-illustration {
+  width: 100%;
+  height: 140px;
+  border-radius: 12px;
+  border: 1px dashed var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  background: var(--surface);
+}
+
+/* ── Actions Buttons (lado a lado) ── */
+.tutorial-actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.tutorial-btn {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font);
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tutorial-btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.tutorial-btn-primary:hover {
+  background: #9480ff;
+}
+
+.tutorial-btn-secondary {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+.tutorial-btn-secondary:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.tutorial-btn-success {
+  background: var(--success);
+  color: #0f0f14;
+}
+
+.tutorial-btn-success:hover {
+  filter: brightness(1.1);
+}
+
+.tutorial-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Scrollbar personalizada ── */
+.tutorial-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tutorial-content::-webkit-scrollbar-track {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.tutorial-content::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+.tutorial-content::-webkit-scrollbar-thumb:hover {
+  background: #9480ff;
+}
+
+/* ── Keyframes ── */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

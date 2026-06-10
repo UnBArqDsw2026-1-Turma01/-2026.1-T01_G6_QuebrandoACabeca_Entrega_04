@@ -1,0 +1,219 @@
+/* ── CSS Variables ── */
+:root {
+  --bg: #0f0f14;
+  --surface: #1a1a24;
+  --card: #22223a;
+  --border: #2e2e4a;
+  --accent: #7c6af7;
+  --accent2: #f0a500;
+  --success: #34c98a;
+  --danger: #f05c5c;
+  --text: #e8e8f0;
+  --muted: #8888aa;
+  --radius: 14px;
+  --font: 'Outfit', sans-serif;
+  --mono: 'Space Mono', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Body ── */
+.iu-body {
+  background: var(--bg);
+  font-family: var(--font);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+.iu-body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 50%, #7c6af722, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Confetti Canvas ── */
+.iu-confetti-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Card ── */
+.iu-card {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 32px 80px #0009;
+  text-align: center;
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.iu-emoji {
+  font-size: 56px;
+}
+
+.iu-title {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* ── Stars ── */
+.iu-stars {
+  display: flex;
+  gap: 8px;
+  font-size: 36px;
+}
+
+.iu-stars span {
+  display: inline-block;
+  animation: starPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.iu-stars span:nth-child(1) {
+  animation-delay: 0.3s;
+}
+.iu-stars span:nth-child(2) {
+  animation-delay: 0.5s;
+}
+.iu-stars span:nth-child(3) {
+  animation-delay: 0.7s;
+}
+
+/* ── Stats ── */
+.iu-stats {
+  display: flex;
+  gap: 24px;
+}
+
+.iu-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.iu-stat-value {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.iu-stat-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.iu-success {
+  color: var(--success);
+}
+
+/* ── Divider ── */
+.iu-divider {
+  height: 1px;
+  background: var(--border);
+  width: 100%;
+}
+
+/* ── Actions ── */
+.iu-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* ── Buttons ── */
+.iu-btn {
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font);
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.iu-btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.iu-btn-primary:hover {
+  background: #9480ff;
+  transform: translateY(-1px);
+}
+
+.iu-btn-warn {
+  background: var(--accent2);
+  color: #0f0f14;
+}
+
+.iu-btn-warn:hover {
+  filter: brightness(1.1);
+}
+
+.iu-btn-secondary {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+.iu-btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+/* ── Keyframes ── */
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes starPop {
+  0% {
+    transform: scale(0) rotate(-20deg);
+  }
+  80% {
+    transform: scale(1.2) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}

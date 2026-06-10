@@ -1,0 +1,223 @@
+/* ── CSS Variables ── */
+:root {
+  --bg: #0f0f14;
+  --surface: #1a1a24;
+  --card: #22223a;
+  --border: #2e2e4a;
+  --accent: #7c6af7;
+  --accent2: #f0a500;
+  --success: #34c98a;
+  --danger: #f05c5c;
+  --text: #e8e8f0;
+  --muted: #8888aa;
+  --radius: 14px;
+  --font: 'Outfit', sans-serif;
+  --mono: 'Space Mono', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Upload page ── */
+.upload-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.upload-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 40% at 50% -10%, #7c6af71a 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Header ── */
+header {
+  background: #0f0f14dd;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* Botão voltar estilizado como no menu */
+.back-button {
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: opacity 0.15s;
+  font-family: var(--font);
+}
+
+.back-button:hover {
+  opacity: 0.7;
+}
+
+/* ── Main ── */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  gap: 24px;
+  position: relative;
+}
+
+.upload-title {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.upload-sub {
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ── Upload Zone ── */
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  padding: 40px 32px;
+  text-align: center;
+  cursor: pointer;
+  max-width: 400px;
+  width: 100%;
+  transition: all 0.2s;
+  background: var(--surface);
+}
+
+.upload-zone:hover,
+.upload-zone.dragover {
+  border-color: var(--accent);
+  background: #7c6af708;
+}
+
+.upload-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.upload-zone p {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.upload-zone span {
+  font-size: 11px;
+  color: var(--accent);
+}
+
+/* ── Hidden file input ── */
+.iu-file-input {
+  display: none;
+}
+
+/* ── Preview ── */
+.iu-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 400px;
+  width: 100%;
+}
+
+.preview-img {
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  border: 1px solid var(--accent);
+  background: linear-gradient(135deg, #7c6af733, #f0a50033);
+}
+
+.file-info {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── Button Wrapper ── */
+.button-wrapper {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ── Buttons ── */
+.iu-btn {
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font);
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #9480ff;
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.iu-link {
+  font-size: 13px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: opacity 0.15s;
+  background: none;
+  border: none;
+  font-family: var(--font);
+}
+
+.iu-link:hover {
+  opacity: 0.7;
+}
