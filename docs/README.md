@@ -454,7 +454,7 @@ body {
     <div class="section-label">§ 03</div>
     <h2 class="section-title">Screenshots da Quarta Entrega</h2>
     <div class="screenshots-placeholder">
-        [[slider]]()
+        [[slider]](assets/Fluxo1.jpg|assets/Modelo1.jpg|assets/Modelo2.jpg|assets/Modelo3.jpg|assets/Modelo4.jpg|assets/Modelo5.jpg)
     </div>
   </div>
 <!-- EXECUÇÃO -->
@@ -541,6 +541,13 @@ python3 main.py</pre>
         <tr>
           <td>10/06/2026</td>
           <td>Editar o template da página.</td>
+          <td>João Eduardo</td>
+        </tr>
+      </tbody>
+      <tbody>
+        <tr>
+          <td>15/06/2026</td>
+          <td>Adição das imagens do DAS.</td>
           <td>João Eduardo</td>
         </tr>
       </tbody>

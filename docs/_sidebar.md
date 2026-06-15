@@ -1,7 +1,6 @@
 <!-- docs/_sidebar.md -->
 
 - [Home](/README.md)
-- [Projetos](/Projeto/Projeto.md)
 
 - **Arquitetura de Software & Reutilização**
   - [4. Desenho de Software (Arquitetura & Reutilização de Software)](/ArquiteturaReutilizacao/4.ArquiteturaReutilizacao.md)
