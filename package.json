@@ -1,8 +1,13 @@
 {
   "dependencies": {
+    "fastapi": "^0.0.8",
     "react-router-dom": "^7.15.1"
   },
   "devDependencies": {
-    "@types/react-router-dom": "^5.3.3"
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/jest": "^30.0.0",
+    "@types/react-router-dom": "^5.3.3",
+    "react-scripts": "^5.0.1"
   }
 }
