@@ -1,0 +1,40 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: puzzle-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/app:/app
+      - puzzle_data:/app/data   # ← volume montado em um diretório
+    environment:
+      - DATABASE_URL=sqlite:///./data/quebra_cabeca.db
+    networks:
+      - puzzle-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: puzzle-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - puzzle-network
+
+volumes:
+  puzzle_data:
+    driver: local
+
+networks:
+  puzzle-network:
+    driver: bridge

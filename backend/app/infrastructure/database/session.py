@@ -16,18 +16,26 @@ Uso típico em um router/service:
 
 from __future__ import annotations
 
+
 from collections.abc import Generator
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
+import os
+
 # ---------------------------------------------------------------------------
 # Configuração da engine
 # ---------------------------------------------------------------------------
 
-# Caminho do arquivo .db — fica na raiz de backend/app/.
-# Para trocar de banco no futuro (ex: PostgreSQL em produção), troque apenas
-# esta URL, nada mais no projeto precisa mudar.
+# Diretório onde este arquivo está
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Sobe dois níveis para chegar em /app (se necessário) ou use caminho relativo
+# Melhor: usar caminho relativo a partir do diretório de trabalho
+# Como o WORKDIR é /app, podemos usar "./data/quebra_cabeca.db"
+
+# Para garantir, usamos um caminho absoluto baseado no diretório de trabalho
+# Ou simplesmente:
 DATABASE_URL = "sqlite:///./quebra_cabeca.db"
 
 # `check_same_thread=False` é necessário apenas para SQLite, pois por padrão
