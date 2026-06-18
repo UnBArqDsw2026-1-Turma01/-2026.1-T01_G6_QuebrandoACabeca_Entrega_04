@@ -1,20 +1,3 @@
-/* ── CSS Variables ── */
-:root {
-  --bg: #0f0f14;
-  --surface: #1a1a24;
-  --card: #22223a;
-  --border: #2e2e4a;
-  --accent: #7c6af7;
-  --accent2: #f0a500;
-  --success: #34c98a;
-  --danger: #f05c5c;
-  --text: #e8e8f0;
-  --muted: #8888aa;
-  --radius: 14px;
-  --font: 'Outfit', sans-serif;
-  --mono: 'Space Mono', monospace;
-}
-
 *,
 *::before,
 *::after {

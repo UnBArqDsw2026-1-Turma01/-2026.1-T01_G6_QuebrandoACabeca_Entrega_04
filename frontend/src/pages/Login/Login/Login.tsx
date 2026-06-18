@@ -1,15 +1,23 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../../hooks/useAuth'
 import './Login.css'
 
 export default function Login() {
   const navigate = useNavigate()
-  const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('')
-  const [erro, setErro]   = useState('')
+  const { login, isLoading, isAuthenticated } = useAuth()
+
+  const [email, setEmail]         = useState('')
+  const [senha, setSenha]         = useState('')
+  const [erro, setErro]           = useState('')
   const [senhaErro, setSenhaErro] = useState(false)
 
-  // 🔥 FORÇA LIMPEZA DOS CAMPOS AO ABRIR A PÁGINA
+  // Se já estiver autenticado (sessão restaurada), vai direto pro menu
+  useEffect(() => {
+    if (isAuthenticated) navigate('/menu', { replace: true })
+  }, [isAuthenticated, navigate])
+
+  // Limpa os campos ao abrir a página
   useEffect(() => {
     setEmail('')
     setSenha('')
@@ -17,7 +25,7 @@ export default function Login() {
     setSenhaErro(false)
   }, [])
 
-  function handleLogin() {
+  async function handleLogin() {
     if (!email || !senha) {
       setErro('⚠ Preencha todos os campos.')
       setSenhaErro(true)
@@ -25,16 +33,27 @@ export default function Login() {
     }
     setErro('')
     setSenhaErro(false)
-    navigate('/menu')
+
+    try {
+      await login(email, senha)
+      navigate('/menu', { replace: true })
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setErro(err.message)
+      } else {
+        setErro('Não foi possível entrar. Tente novamente.')
+      }
+      setSenhaErro(true)
+    }
   }
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') handleLogin()
+      if (e.key === 'Enter' && !isLoading) handleLogin()
     }
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
-  }, [email, senha])
+  }, [email, senha, isLoading])
 
   return (
     <div className="login-page">
@@ -66,6 +85,7 @@ export default function Login() {
           placeholder="📧  E-mail"
           value={email}
           onChange={e => setEmail(e.target.value)}
+          disabled={isLoading}
           autoComplete="off"
         />
         <input
@@ -74,11 +94,16 @@ export default function Login() {
           placeholder="🔒  Senha"
           value={senha}
           onChange={e => setSenha(e.target.value)}
+          disabled={isLoading}
           autoComplete="new-password"
         />
 
-        <button className="btn btn-primary" onClick={handleLogin}>
-          Entrar
+        <button
+          className="btn btn-primary"
+          onClick={handleLogin}
+          disabled={isLoading}
+        >
+          {isLoading ? 'Entrando…' : 'Entrar'}
         </button>
 
         <div className="divider" />

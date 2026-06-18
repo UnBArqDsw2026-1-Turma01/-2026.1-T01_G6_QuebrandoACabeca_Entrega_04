@@ -11,6 +11,17 @@
   -webkit-user-select: none;
 }
 
+.jogo-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 24px;
+  font-size: 18px;
+  color: var(--text-secondary);
+}
+
 /* ── HUD ── */
 .jogo-hud {
   background: var(--card);
@@ -42,10 +53,9 @@
 
 .jogo-pause-btn {
   cursor: pointer;
-  transition: transform 0.2s;
   font-size: 20px;
+  transition: transform 0.2s;
 }
-
 .jogo-pause-btn:hover { transform: scale(1.15); }
 
 /* ── Layout ── */
@@ -67,48 +77,42 @@
 /* ── Board ── */
 .jogo-board {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 3px;
-  width: min(68vw, 390px);
-  height: min(68vw, 390px);
+  /* gridTemplateColumns definido inline para suportar N dinâmico (5, 6 ou 8) */
+  gap: 2px;
+  width:  min(65vw, 400px);
+  height: min(65vw, 400px);
 }
 
+/* ── Células ── */
 .jogo-cell {
-  border-radius: 5px;
+  border-radius: 4px;
   border: 1px solid var(--border);
-  transition: transform 0.12s, box-shadow 0.12s, border-color 0.15s;
+  transition: transform 0.12s, box-shadow 0.12s;
   position: relative;
   overflow: hidden;
-  aspect-ratio: 1 / 1;
 }
 
-.jogo-cell.locked  { border-color: transparent; }
-.jogo-cell.blank   { background: var(--card); opacity: 0.32; border-color: transparent; }
-.jogo-cell.placed  { border-color: transparent; }
-.jogo-cell.target  { background: var(--card); }
-
-.jogo-cell.over-cell   { transform: scale(1.08); z-index: 2; }
-.jogo-cell.correct-over { box-shadow: 0 0 0 2px var(--success); }
-.jogo-cell.wrong-over  { box-shadow: 0 0 0 2px var(--danger); }
-
-.jogo-cell-dot {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  opacity: 0.4;
+.jogo-cell.placed {
+  border-color: transparent;
+  opacity: 1 !important;
+  /* overflow: visible para o ::after não ser cortado */
+  overflow: visible;
+  cursor: pointer;
+  transition: filter 0.15s, box-shadow 0.15s;
 }
+
+.jogo-cell.target {
+  background: var(--card);
+}
+
+.jogo-cell.over-cell  { transform: scale(1.06); z-index: 2; box-shadow: 0 0 0 2px var(--accent); }
+.jogo-cell.hint       { animation: hintPulse .75s ease-in-out infinite; z-index: 3; }
 
 /* ── Animations ── */
 @keyframes hintPulse {
   0%, 100% { box-shadow: 0 0 0 2px var(--accent2), 0 0 8px rgba(240,165,0,.3); }
   50%       { box-shadow: 0 0 0 3px var(--accent2), 0 0 16px rgba(240,165,0,.55); }
 }
-
-.jogo-cell.hint       { animation: hintPulse .75s ease-in-out infinite; z-index: 3; }
-.jogo-tray-piece.hint-piece { animation: hintPulse .75s ease-in-out infinite; }
 
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
@@ -119,17 +123,25 @@
 .jogo-cell.shake { animation: shake .26s ease-in-out; }
 
 @keyframes placeIn {
-  0%   { transform: scale(1.4) rotate(-6deg); opacity: .5; }
-  65%  { transform: scale(.95) rotate(0deg); }
+  0%   { transform: scale(1.3) rotate(-5deg); opacity: .6; }
+  65%  { transform: scale(.96) rotate(0deg); }
   100% { transform: scale(1); opacity: 1; }
 }
 .jogo-cell.place-anim { animation: placeIn .3s ease-out forwards; }
 
+@keyframes removeOut {
+  40%  { transform: scale(0.82) rotate(-6deg); opacity: 0.8; }
+  100% { transform: scale(0.55) rotate(8deg); opacity: 0; }
+}
+.jogo-cell.remove-anim { animation: removeOut .28s ease-in forwards; }
+
 @keyframes pausePulse {
   0%, 100% { opacity: 1; }
-  50%       { opacity: .5; }
+  50%       { opacity: .45; }
 }
 .pulse-anim { animation: pausePulse 1.4s infinite; }
+
+.jogo-tray-piece.hint-piece { animation: hintPulse .75s ease-in-out infinite; }
 
 /* ── Sidebar ── */
 .jogo-sidebar {
@@ -156,11 +168,10 @@
   font-family: var(--font);
   line-height: 1.7;
 }
-
-.jogo-btn:hover            { border-color: var(--accent); color: var(--text); }
-.jogo-btn.warn             { border-color: var(--accent2); color: var(--accent2); }
-.jogo-btn.warn:hover       { background: rgba(240,165,0,.08); }
-.jogo-btn.off              { opacity: .35; pointer-events: none; }
+.jogo-btn:hover      { border-color: var(--accent); color: var(--text); }
+.jogo-btn.warn       { border-color: var(--accent2); color: var(--accent2); }
+.jogo-btn.warn:hover { background: rgba(240,165,0,.08); }
+.jogo-btn.off        { opacity: .35; pointer-events: none; }
 
 .jogo-progress-section {
   margin-top: auto;
@@ -190,119 +201,115 @@
   font-family: var(--mono);
 }
 
-/* ── Tray (estrutura com label fixo e container rolável) ── */
+/* ── Tray ── */
 .jogo-tray {
   background: var(--card);
   border-top: 1px solid var(--border);
-  padding: 12px 16px;
+  padding: 14px 16px;
+  min-height: 90px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0;
   flex-shrink: 0;
-  min-height: auto;
 }
 
-/* Label fixo - NÃO ROLA */
 .jogo-tray-label {
   font-size: 11px;
   font-weight: 600;
   color: var(--muted);
   white-space: nowrap;
   flex-shrink: 0;
-  background: var(--card);
-  padding-right: 8px;
-  letter-spacing: 0.5px;
+  /* Separador visual entre label e peças */
+  padding-right: 16px;
+  margin-right: 8px;
+  border-right: 1px solid var(--border);
 }
 
-/* Container rolável das peças */
 .jogo-tray-scroll {
   display: flex;
   gap: 8px;
   overflow-x: auto;
   overflow-y: hidden;
   flex: 1;
-  padding-bottom: 8px;
+  padding: 6px 4px 10px 12px; /* left: afasta as peças do separador */
+  align-items: center;
 }
 
-/* Scrollbar personalizada para o container rolável - MAIOR */
-.jogo-tray-scroll::-webkit-scrollbar {
-  height: 10px;  /* Aumentado para 10px */
-}
+.jogo-tray-scroll::-webkit-scrollbar        { height: 6px; }
+.jogo-tray-scroll::-webkit-scrollbar-track  { background: var(--border); border-radius: 3px; }
+.jogo-tray-scroll::-webkit-scrollbar-thumb  { background: var(--accent); border-radius: 3px; }
+.jogo-tray-scroll::-webkit-scrollbar-thumb:hover { background: #9480ff; }
 
-.jogo-tray-scroll::-webkit-scrollbar-track {
-  background: var(--border);
-  border-radius: 5px;
-}
-
-.jogo-tray-scroll::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 5px;
-}
-
-.jogo-tray-scroll::-webkit-scrollbar-thumb:hover {
-  background: #9480ff;
-}
-
-/* ── Tray Pieces - MESMO TAMANHO DAS CÉLULAS DO BOARD ── */
+/* Peças do tray — drag para colocar */
 .jogo-tray-piece {
-  width: calc(min(68vw, 390px) / 6 - 3px);
-  height: calc(min(68vw, 390px) / 6 - 3px);
-  min-width: 40px;
-  min-height: 40px;
-  max-width: 65px;
-  max-height: 65px;
-  border-radius: 5px;
-  border: 1px solid rgba(255,255,255,.18);
+  width:  calc(min(65vw, 400px) / var(--grid-n, 6) * 0.72);
+  height: calc(min(65vw, 400px) / var(--grid-n, 6) * 0.72);
+  min-width:  28px;
+  min-height: 28px;
+  max-width:  50px;
+  max-height: 50px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(255,255,255,.15);
   cursor: grab;
   flex-shrink: 0;
-  transition: transform 0.15s;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
   touch-action: none;
 }
-
 .jogo-tray-piece:hover {
-  transform: scale(1.05) translateY(-3px);
+  transform: scale(1.1) translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.4);
+}
+
+/* Peças já colocadas no board — arraste para mover */
+.jogo-cell.placed {
+  cursor: grab;
+  transition: filter 0.15s, box-shadow 0.15s, transform 0.15s;
+  overflow: visible;
+}
+.jogo-cell.placed:hover {
+  filter: brightness(0.82) saturate(0.85);
+  box-shadow: inset 0 0 0 2px var(--accent2);
+}
+.jogo-cell.placed:hover::after {
+  content: '✥';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: rgba(255,255,255,.85);
+  pointer-events: none;
+}
+.jogo-cell.placed:active {
+  cursor: grabbing;
 }
 
 /* ── Drag Ghost ── */
 .jogo-drag-ghost {
   position: fixed;
-  width: calc(min(68vw, 390px) / 6 - 3px);
-  height: calc(min(68vw, 390px) / 6 - 3px);
-  min-width: 40px;
-  min-height: 40px;
-  max-width: 65px;
-  max-height: 65px;
-  border-radius: 5px;
+  width:  calc(min(65vw, 400px) / var(--grid-n, 6) * 0.72);
+  height: calc(min(65vw, 400px) / var(--grid-n, 6) * 0.72);
+  min-width:  28px;
+  min-height: 28px;
+  max-width:  50px;
+  max-height: 50px;
+  border-radius: 4px;
   pointer-events: none;
   z-index: 9999;
   box-shadow: 0 10px 28px rgba(0,0,0,.6);
   transform: scale(1.1) rotate(-3deg);
+  transition: transform 0.15s, opacity 0.15s, box-shadow 0.15s;
 }
 
-/* ── Toasts ── */
-.jogo-toast {
-  position: fixed;
-  bottom: 70px;
-  left: 50%;
-  transform: translateX(-50%) translateY(8px);
-  background: rgba(240,165,0,.93);
-  color: #1a0f00;
-  padding: 7px 18px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  z-index: 400;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity .25s, transform .25s;
-  white-space: nowrap;
+/* Quando o ghost está fora da área do board — indica que vai voltar ao tray */
+.jogo-drag-ghost.ghost-leaving {
+  transform: scale(0.75) rotate(8deg);
+  opacity: 0.55;
+  box-shadow: 0 4px 12px rgba(0,0,0,.3);
 }
 
-.jogo-toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
+/* ── Toast ── */
 .jogo-wrong-toast {
   position: fixed;
   bottom: 70px;
@@ -320,13 +327,12 @@
   transition: opacity .25s, transform .25s;
   white-space: nowrap;
 }
-
 .jogo-wrong-toast.show {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
 
-/* ── Modal de confirmação (Reiniciar) ── */
+/* ── Modal ── */
 .jogo-modal-overlay {
   position: fixed;
   inset: 0;
@@ -336,7 +342,6 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  animation: jogoFadeIn 0.2s ease both;
 }
 
 .jogo-modal {
@@ -350,7 +355,12 @@
   align-items: center;
   gap: 20px;
   text-align: center;
-  animation: jogoModalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  animation: modalPop .3s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 .jogo-modal-text {
@@ -359,18 +369,9 @@
   color: var(--text);
   line-height: 1.4;
 }
+.jogo-modal-text span { font-size: 12px; color: var(--muted); font-weight: normal; }
 
-.jogo-modal-text span {
-  font-size: 12px;
-  color: var(--muted);
-  font-weight: normal;
-}
-
-.jogo-modal-actions {
-  display: flex;
-  gap: 12px;
-  width: 100%;
-}
+.jogo-modal-actions { display: flex; gap: 12px; width: 100%; }
 
 .jogo-modal-btn {
   flex: 1;
@@ -383,39 +384,32 @@
   font-family: var(--font);
   transition: all 0.15s;
 }
+.jogo-modal-btn.cancel  { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+.jogo-modal-btn.cancel:hover  { border-color: var(--accent); color: var(--text); }
+.jogo-modal-btn.confirm { background: var(--danger); color: #fff; }
+.jogo-modal-btn.confirm:hover { filter: brightness(1.1); }
 
-.jogo-modal-btn.cancel {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--muted);
+/* Estilo do cursor para peças do board arrastáveis */
+.jogo-cell.placed {
+  cursor: grab;
 }
 
-.jogo-modal-btn.cancel:hover {
-  border-color: var(--accent);
-  color: var(--text);
+.jogo-cell.placed:active {
+  cursor: grabbing;
 }
 
-.jogo-modal-btn.confirm {
-  background: var(--danger);
-  color: #fff;
+/* Animação de retorno da peça ao tray */
+.jogo-tray-piece.returning {
+  animation: slideInRight 0.4s ease;
 }
 
-.jogo-modal-btn.confirm:hover {
-  filter: brightness(1.1);
-}
-
-@keyframes jogoFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes jogoModalPop {
-  from {
+@keyframes slideInRight {
+  0% {
+    transform: translateX(60px);
     opacity: 0;
-    transform: scale(0.9);
   }
-  to {
+  100% {
+    transform: translateX(0);
     opacity: 1;
-    transform: scale(1);
   }
 }

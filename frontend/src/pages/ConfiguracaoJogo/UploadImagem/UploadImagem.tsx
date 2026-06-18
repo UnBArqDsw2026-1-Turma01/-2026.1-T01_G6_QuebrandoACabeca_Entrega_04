@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, DragEvent, ChangeEvent } from "react";
 import { useNavigate } from 'react-router-dom'
+import { useGameContext } from '../../../context/GameContext';
 import "./UploadImagem.css";
 
 const MAX_SIZE_MB = 10;
@@ -15,13 +16,20 @@ const ImageUpload: React.FC = () => {
   const [preview, setPreview] = useState<FilePreview | null>(null);
   const [dragging, setDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { setSelectedImageBase64, setIsCustomImage } = useGameContext();
 
   const navigate = useNavigate()
 
   const processFile = useCallback((file: File | null | undefined) => {
     if (!file) return;
-    if (!ACCEPTED_TYPES.includes(file.type)) return;
-    if (file.size / 1024 / 1024 > MAX_SIZE_MB) return;
+    if (!ACCEPTED_TYPES.includes(file.type)) {
+      alert('Formato não suportado. Use JPG, PNG ou WEBP.');
+      return;
+    }
+    if (file.size / 1024 / 1024 > MAX_SIZE_MB) {
+      alert(`Arquivo muito grande. Máximo: ${MAX_SIZE_MB}MB.`);
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -56,6 +64,17 @@ const ImageUpload: React.FC = () => {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
+  const handleConfirm = () => {
+    if (preview) {
+      console.log('📤 Salvando imagem no contexto como customizada...');
+      console.log('📏 Tamanho:', preview.dataUrl.length);
+      
+      setSelectedImageBase64(preview.dataUrl);
+      setIsCustomImage(true); // MARCA COMO IMAGEM PRÓPRIA
+      navigate('/selecao-dificuldade');
+    }
+  };
+  
   return (
     <div className="upload-page">
       <header>
@@ -107,7 +126,7 @@ const ImageUpload: React.FC = () => {
             <div className="file-info">{preview.name} — {preview.sizeMb} MB</div>
             <button
               className="iu-btn btn-primary"
-              onClick={() => navigate('/selecao-dificuldade')}
+              onClick={handleConfirm}
             >
               Confirmar e continuar →
             </button>

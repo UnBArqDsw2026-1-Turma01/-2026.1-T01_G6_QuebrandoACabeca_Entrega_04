@@ -288,3 +288,53 @@
     transform: none;
   }
 }
+
+/* ── Estilos para a explicação de estrelas ── */
+.stars-explanation {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.stars-explanation p {
+  margin-bottom: 8px;
+}
+
+.stars-explanation ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+}
+
+.stars-explanation ul li {
+  padding: 4px 0 4px 20px;
+  position: relative;
+}
+
+.stars-explanation ul li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+.stars-explanation strong {
+  color: var(--accent2);
+}
+
+.stars-max {
+  background: var(--surface);
+  border-left: 3px solid var(--accent2);
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin: 8px 0;
+}
+
+.stars-max strong {
+  color: var(--accent2);
+}
+
+/* ── Ajuste para descrições com JSX ── */
+.tutorial-step-description {
+  width: 100%;
+}

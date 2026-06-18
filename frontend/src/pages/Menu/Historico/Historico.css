@@ -1,49 +1,18 @@
-/* ── CSS Variables ── */
-:root {
-  --bg: #0f0f14;
-  --surface: #1a1a24;
-  --card: #22223a;
-  --border: #2e2e4a;
-  --accent: #7c6af7;
-  --accent2: #f0a500;
-  --success: #34c98a;
-  --danger: #f05c5c;
-  --text: #e8e8f0;
-  --muted: #8888aa;
-  --radius: 14px;
-  --font: 'Outfit', sans-serif;
-  --mono: 'Space Mono', monospace;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 /* ── Page ── */
 .hist-page {
   background: var(--bg);
   font-family: var(--font);
   color: var(--text);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  position: fixed;
-  inset: 0;
 }
 
-/* ── Header (igual às Configurações) ── */
+/* ── Header ── */
 .hist-header {
-  background: #0f0f14dd;
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  padding: 14px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-shrink: 0;
 }
 
 .hist-logo {
@@ -51,139 +20,217 @@
   font-size: 16px;
   font-weight: 700;
   color: var(--accent);
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .hist-back {
   font-size: 13px;
   color: var(--accent);
   cursor: pointer;
-  text-decoration: none;
-  transition: opacity 0.15s;
   background: none;
   border: none;
   font-family: var(--font);
+  transition: opacity 0.15s;
 }
+.hist-back:hover { opacity: 0.7; }
 
-.hist-back:hover {
-  opacity: 0.7;
-}
-
-/* ── Main Content (centralizado) ── */
+/* ── Content ── */
 .hist-content {
   flex: 1;
-  padding: 28px 24px;
-  overflow-y: auto;
+  padding: 24px;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  width: 100%;
 }
 
-/* Container centralizado para o conteúdo */
 .hist-container {
   width: 100%;
   max-width: 640px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-.hist-page-title {
+.hist-section-label {
   font-size: 11px;
   color: var(--muted);
   font-family: var(--mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin-bottom: 16px;
-  text-align: center;
-  width: 100%;
 }
 
-/* ── History List ── */
+/* ── Lista ── */
 .hist-list {
+  list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  width: 100%;
+  gap: 10px;
+  padding-top: 2px; /* evita que o primeiro card seja cortado pela animação */
 }
 
-/* ── History Items (horizontal, similar às configs) ── */
+/* ── Card ── */
 .hist-item {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px 18px;
+  border-radius: 14px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
-  gap: 16px;
-  transition: all 0.2s;
-  cursor: pointer;
-  width: 100%;
+  gap: 14px;
+  animation: fadeUp 0.3s ease both;
+  transition: border-color 0.2s, transform 0.15s;
 }
 
 .hist-item:hover {
   border-color: var(--accent);
-  background: #22223a;
-  transform: translateX(4px);
+  transform: translateX(3px);
 }
 
+/* Custom: sem hover agressivo */
+.hist-item--custom {
+  opacity: 0.85;
+}
+.hist-item--custom:hover {
+  border-color: var(--border);
+  transform: none;
+}
+
+/* ── Thumbnail base ── */
 .hist-thumb {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
-.hist-info {
+/* Nível fixo — gradiente + emoji grande */
+.hist-thumb--level {
+  position: relative;
+}
+.hist-thumb-emoji {
+  font-size: 24px;
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,.4));
+}
+
+/* Upload custom — fundo escuro texturizado + câmera + label */
+.hist-thumb--custom {
+  background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+  border: 1px dashed var(--border);
+  gap: 2px;
+}
+.hist-thumb-camera {
+  font-size: 20px;
+  line-height: 1;
+}
+.hist-thumb-label {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── Body (3 linhas) ── */
+.hist-body {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.hist-stars {
-  font-size: 12px;
-  margin-bottom: 4px;
+.hist-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
+/* Linha 1 — título + badge */
+.hist-row--top {
+  justify-content: space-between;
+}
 .hist-title {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
-  margin-bottom: 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.hist-meta {
-  font-size: 11px;
-  color: var(--muted);
+.hist-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.04em;
+}
+.hist-badge--level {
+  background: #7c6af722;
+  color: var(--accent);
+  border: 1px solid #7c6af744;
+}
+.hist-badge--custom {
+  background: #f0a50018;
+  color: var(--accent2);
+  border: 1px solid #f0a50044;
 }
 
-/* ── Button ── */
-.hist-btn {
-  padding: 6px 16px;
+/* Linha 2 — estrelas + score */
+.hist-row--mid {
+  justify-content: space-between;
+}
+
+.hist-stars { font-size: 12px; }
+.star-full  { color: var(--accent2); }
+.star-empty { color: var(--border); }
+
+/* Linha 3 — tempo + data */
+.hist-row--meta {
+  font-size: 11px;
+  color: var(--muted);
+  gap: 6px;
+}
+
+/* ── Botão rejogar ── */
+.hist-replay-btn {
+  padding: 7px 14px;
   border-radius: 8px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   border: none;
   font-family: var(--font);
-  transition: all 0.15s;
   white-space: nowrap;
   flex-shrink: 0;
   background: var(--accent);
   color: #fff;
+  transition: background 0.15s, transform 0.1s;
+  min-width: 72px;
+  text-align: center;
 }
-
-.hist-btn:hover {
+.hist-replay-btn:hover {
   background: #9480ff;
+  transform: translateY(-1px);
+}
+.hist-replay-btn--disabled {
+  background: var(--surface);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  cursor: not-allowed;
+}
+.hist-replay-btn--disabled:hover {
+  background: var(--surface);
+  transform: none;
 }
 
-/* ── Empty State ── */
-.hist-empty {
+/* ── Feedback (loading / erro / vazio) ── */
+.hist-feedback {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -192,54 +239,29 @@
   color: var(--muted);
   text-align: center;
   padding: 60px 20px;
-  width: 100%;
 }
 
-.hist-empty-icon {
-  font-size: 48px;
-}
+.hist-feedback-icon  { font-size: 48px; }
+.hist-feedback-text  { font-size: 14px; color: var(--text); }
+.hist-feedback-sub   { font-size: 12px; }
 
-.hist-empty-text {
-  font-size: 14px;
+.hist-retry-btn {
+  margin-top: 8px;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font);
+  background: var(--accent);
+  color: #fff;
+  transition: background 0.15s;
 }
+.hist-retry-btn:hover { background: #9480ff; }
 
-.hist-empty-sub {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-/* ── Loading State ── */
-.hist-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  gap: 12px;
-  color: var(--muted);
-  text-align: center;
-  padding: 60px 20px;
-  width: 100%;
-}
-
-/* ── Keyframes ── */
+/* ── Animação ── */
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
 }
-
-.hist-item {
-  animation: fadeUp 0.3s ease both;
-}
-
-.hist-item:nth-child(1) { animation-delay: 0s; }
-.hist-item:nth-child(2) { animation-delay: 0.05s; }
-.hist-item:nth-child(3) { animation-delay: 0.10s; }
-.hist-item:nth-child(4) { animation-delay: 0.15s; }
-.hist-item:nth-child(5) { animation-delay: 0.20s; }
-.hist-item:nth-child(6) { animation-delay: 0.25s; }

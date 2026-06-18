@@ -216,24 +216,6 @@
   font-weight: 600;
 }
 
-.badge-success {
-  background: #34c98a22;
-  color: var(--success);
-  border: 1px solid #34c98a44;
-}
-
-.badge-accent {
-  background: #7c6af722;
-  color: var(--accent);
-  border: 1px solid #7c6af744;
-}
-
-.badge-danger {
-  background: #f05c5c22;
-  color: var(--danger);
-  border: 1px solid #f05c5c44;
-}
-
 /* ── Popup Flutuante ── */
 .card-popup {
   position: fixed;

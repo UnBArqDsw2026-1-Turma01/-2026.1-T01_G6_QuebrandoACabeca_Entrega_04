@@ -33,7 +33,6 @@ from patterns.builder.construtor_facil import ConstrutorFacil
 from patterns.builder.construtor_medio import ConstrutorMedio
 from patterns.builder.director import Director
 from patterns.factory.factory import get_difficulty
-from patterns.composite.peca_unica import PecaUnica
 from domain.dtos import GetToyDifficultyPayload
 from patterns.strategy.efeito_grade_quadricular import EfeitoGradeQuadricular
 from patterns.strategy.efeito_jigsaw import EfeitoJigsaw
@@ -130,21 +129,6 @@ def _pieces_to_json(pieces: list[PieceSchema]) -> list[dict[str, Any]]:
 def _pieces_from_json(raw: list[dict[str, Any]]) -> list[PieceSchema]:
     return [PieceSchema(**item) for item in raw]
 
-
-def _verificar_encaixe(piece: PieceSchema) -> bool:
-    """
-    Delega a verificação de encaixe ao domínio (PecaUnica.verificar_colisao).
-    Usa coordenadas normalizadas (0.0–1.0) e tolerância de 0.02 definida no domínio,
-    garantindo comportamento proporcional independente da resolução da tela.
-    """
-    peca = PecaUnica(
-        posicao_x=piece.posicao_x,
-        posicao_y=piece.posicao_y,
-        posicao_x_certa=piece.posicao_x_certa,
-        posicao_y_certa=piece.posicao_y_certa,
-    )
-    return peca.verificar_colisao()
-
 # ---------------------------------------------------------------------------
 # Endpoints
 # ---------------------------------------------------------------------------
@@ -159,7 +143,7 @@ def _verificar_encaixe(piece: PieceSchema) -> bool:
 def create_puzzle(
     req: CreatePuzzleRequest,
     db: DbSession,
-    owner: OptionalUser,
+    owner: OptionalUser,       # ← sem login é None; com login vincula ao usuário
 ) -> CreatePuzzleResponse:
     # 1. Valida dificuldade
     difficulty_key = _DIFFICULTY_MAP.get(req.difficulty)
@@ -205,7 +189,7 @@ def create_puzzle(
     efeito_qb.set_efeito(effect_class())
     effect_name = efeito_qb.escolher_efeito()
 
-    # 5. Serializa peças — posições já normalizadas (0.0–1.0) pelo construtor
+    # 5. Serializa peças
     pieces = [
         PieceSchema(
             id=i,
@@ -263,12 +247,33 @@ def move_piece(req: MoveRequest, db: DbSession) -> MoveResponse:
             detail=f"Peça {req.piece_id} não encontrada neste puzzle.",
         )
 
-    # Atualiza posição com coordenadas normalizadas enviadas pelo frontend (0.0–1.0)
+    # new_x == -1 sinaliza remoção (peça arrastada para fora do board)
+    if req.new_x == -1 and req.new_y == -1:
+        piece.encaixada = False
+        remaining = sum(1 for p in pieces if not p.encaixada)
+        db_puzzle.pieces_json = _pieces_to_json(pieces)
+        db_puzzle.completo = False
+        db.commit()
+        return MoveResponse(
+            piece_id=req.piece_id,
+            encaixada=False,
+            puzzle_completo=False,
+            pieces_remaining=remaining,
+        )
+
     piece.posicao_x = req.new_x
     piece.posicao_y = req.new_y
 
-    # Delega verificação de encaixe ao domínio (tolerância 0.02 em PecaUnica)
-    piece.encaixada = _verificar_encaixe(piece)
+    # Peça encaixada SOMENTE quando colocada na sua própria célula.
+    # O frontend envia new_x = posicao_x_certa da CÉLULA de destino.
+    # Comparamos com posicao_x_certa da PEÇA — coincidem só quando é a célula certa.
+    # Tolerância mínima para aritmética de float em coordenadas normalizadas (0-1).
+    TOLERANCE = 0.001
+    encaixada = (
+        abs(piece.posicao_x - piece.posicao_x_certa) <= TOLERANCE
+        and abs(piece.posicao_y - piece.posicao_y_certa) <= TOLERANCE
+    )
+    piece.encaixada = encaixada
 
     remaining = sum(1 for p in pieces if not p.encaixada)
     puzzle_completo = remaining == 0
@@ -279,11 +284,31 @@ def move_piece(req: MoveRequest, db: DbSession) -> MoveResponse:
 
     return MoveResponse(
         piece_id=req.piece_id,
-        encaixada=piece.encaixada,
+        encaixada=encaixada,
         puzzle_completo=puzzle_completo,
         pieces_remaining=remaining,
     )
 
+@router.delete(
+    "/{puzzle_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Deletar puzzle",
+    description="Remove um puzzle e todas as suas peças do banco de dados permanentemente.",
+)
+def delete_puzzle(puzzle_id: str, db: DbSession) -> None:
+    """
+    Deleta um puzzle pelo ID.
+    Se o modelo PuzzleState tiver cascade configurado, as peças serão removidas em cascata.
+    """
+    db_puzzle = db.query(PuzzleState).filter(PuzzleState.id == puzzle_id).first()
+    if not db_puzzle:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Puzzle '{puzzle_id}' não encontrado.",
+        )
+    db.delete(db_puzzle)
+    db.commit()
+    # Retorno vazio com status 204 (No Content)
 
 @router.get(
     "/{puzzle_id}",

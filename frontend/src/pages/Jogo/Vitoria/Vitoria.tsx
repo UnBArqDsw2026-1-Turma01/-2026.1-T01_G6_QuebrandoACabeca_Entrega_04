@@ -1,69 +1,67 @@
+// frontend/src/pages/Jogo/Vitoria/Vitoria.tsx
 import React, { useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Vitoria.css";
 
-interface VitoriaProps {
-  // Stats do jogo
-  time?: string; // formato "MM:SS"
-  hintsUsed?: number;
-  points?: number;
-  starsCount?: number; // 1, 2 ou 3
-  levelName?: string;
-  // Callbacks (opcionais)
-  onNextLevel?: () => void;
-  onPlayAgain?: () => void;
-  onMenu?: () => void;
-}
-
-const Vitoria: React.FC<VitoriaProps> = ({
-  time = "03:42",
-  hintsUsed = 1,
-  points = 1200,
-  starsCount = 3,
-  levelName = "Nível",
-  onNextLevel,
-  onPlayAgain,
-  onMenu,
-}) => {
+const Vitoria: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Recebe os dados da navegação
+  const { stars = 0, levelId = null, isCustomImage = false } = (location.state as any) || {};
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const handleNextLevel = () => {
-    if (onNextLevel) {
-      onNextLevel();
-    } else {
-      navigate("/jogo/proximo-nivel"); // Ajuste conforme a rota real
-    }
-  };
-
-  const handlePlayAgain = () => {
-    if (onPlayAgain) {
-      onPlayAgain();
-    } else {
-      navigate("/jogo"); // Ajuste conforme a rota real do jogo
-    }
-  };
-
-  const handleMenu = () => {
-    if (onMenu) {
-      onMenu();
-    } else {
-      navigate("/menu"); // Ajuste conforme a rota real do menu
-    }
-  };
-
-  // Renderiza as estrelas baseado no starsCount
+  // Renderiza as estrelas
   const renderStars = () => {
-    const stars = [];
+    const starsArray = [];
     for (let i = 0; i < 3; i++) {
-      stars.push(
-        <span key={i} style={{ opacity: i < starsCount ? 1 : 0.2 }}>
+      starsArray.push(
+        <span key={i} style={{ opacity: i < stars ? 1 : 0.2, fontSize: '2.5rem' }}>
           ⭐
         </span>
       );
     }
-    return stars;
+    return starsArray;
   };
+
+  // ── PRÓXIMO NÍVEL ──
+  const handleNextLevel = () => {
+    if (!levelId || isCustomImage || levelId >= 4) return;
+    const nextLevel = levelId + 1;
+    navigate('/selecao-dificuldade', { state: { levelId: nextLevel, isCustomImage: false } });
+  };
+
+  // ── JOGAR NOVAMENTE (mesmo nível ou mesma imagem) ──
+  const handlePlayAgain = () => {
+    if (isCustomImage) {
+      // Volta para a seleção de dificuldade com a mesma imagem (já está no contexto)
+      navigate('/selecao-dificuldade', { state: { levelId: null, isCustomImage: true } });
+    } else if (levelId) {
+      navigate('/selecao-dificuldade', { state: { levelId, isCustomImage: false } });
+    } else {
+      // Fallback: vai para seleção de níveis
+      navigate('/selecao-nivel');
+    }
+  };
+
+  // ── MENU PRINCIPAL ──
+  const handleMenu = () => {
+    navigate('/menu');
+  };
+
+  // Verifica se deve mostrar o botão "Próximo Nível"
+  const showNextLevel = !isCustomImage && levelId && levelId >= 1 && levelId <= 3;
+
+  // Determina o título da página
+  let title = '';
+  if (isCustomImage) {
+    title = '📷 Imagem própria completa!';
+  } else if (levelId) {
+    title = `Nível ${levelId} Completo!`;
+  } else {
+    title = 'Parabéns!';
+  }
 
   // Configuração do confetti
   useEffect(() => {
@@ -145,34 +143,27 @@ const Vitoria: React.FC<VitoriaProps> = ({
 
       <div className="iu-card">
         <div className="iu-emoji">🎉</div>
-        <div className="iu-title">{levelName} Completo!</div>
+        <div className="iu-title">{title}</div>
         <div className="iu-stars">{renderStars()}</div>
-
-        <div className="iu-stats">
-          <div className="iu-stat">
-            <div className="iu-stat-value">{time}</div>
-            <div className="iu-stat-label">Tempo</div>
-          </div>
-          <div className="iu-stat">
-            <div className="iu-stat-value">{hintsUsed}</div>
-            <div className="iu-stat-label">Dica usada</div>
-          </div>
-          <div className="iu-stat">
-            <div className="iu-stat-value iu-success">{points.toLocaleString()}</div>
-            <div className="iu-stat-label">Pontos</div>
-          </div>
-        </div>
 
         <div className="iu-divider" />
 
         <div className="iu-actions">
-          <button className="iu-btn iu-btn-primary" onClick={handleNextLevel}>
-            Próximo Nível →
-          </button>
+          {showNextLevel ? (
+            <button className="iu-btn iu-btn-primary" onClick={handleNextLevel}>
+              Próximo Nível →
+            </button>
+          ) : levelId === 4 && !isCustomImage ? (
+            <button className="iu-btn iu-btn-primary" disabled style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+              🏁 Todos os níveis concluídos!
+            </button>
+          ) : null}
+
           <button className="iu-btn iu-btn-warn" onClick={handlePlayAgain}>
             🔄 Jogar Novamente
           </button>
-          <button className="iu-btn iu-btn-secondary" onClick={handleMenu}>
+
+          <button className="iu-btn iu-btn-warn" onClick={handleMenu}>
             🏠 Menu Principal
           </button>
         </div>

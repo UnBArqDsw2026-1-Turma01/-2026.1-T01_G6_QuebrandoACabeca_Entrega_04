@@ -1,20 +1,33 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../../hooks/useAuth'
+import { NAME_MIN_LENGTH, PASSWORD_MIN_LENGTH } from '../../../utils/constants'
 import './Cadastro.css'
 
 export default function Cadastro() {
   const navigate = useNavigate()
+  const { register, isLoading } = useAuth()
+
   const [nome, setNome]           = useState('')
   const [email, setEmail]         = useState('')
   const [senha, setSenha]         = useState('')
   const [confirmar, setConfirmar] = useState('')
   const [erro, setErro]           = useState('')
-  const [sucesso, setSucesso]     = useState(false)
   const [confirmarErro, setConfirmarErro] = useState(false)
+  const [sucesso, setSucesso]     = useState(false)
 
-  function handleCadastro() {
+  async function handleCadastro() {
+    // Validações locais — espelham RegisterRequest do backend
     if (!nome || !email || !senha || !confirmar) {
       setErro('⚠ Preencha todos os campos.')
+      return
+    }
+    if (nome.length < NAME_MIN_LENGTH) {
+      setErro(`⚠ O nome deve ter ao menos ${NAME_MIN_LENGTH} caracteres.`)
+      return
+    }
+    if (senha.length < PASSWORD_MIN_LENGTH) {
+      setErro(`⚠ A senha deve ter ao menos ${PASSWORD_MIN_LENGTH} caracteres.`)
       return
     }
     if (senha !== confirmar) {
@@ -22,9 +35,21 @@ export default function Cadastro() {
       setConfirmarErro(true)
       return
     }
+
     setErro('')
     setConfirmarErro(false)
-    setSucesso(true)
+
+    try {
+      await register(nome, email, senha)
+      setSucesso(true)
+    } catch (err: unknown) {
+      // Mensagem de erro já formatada pelo AuthContext (vem do backend via ApiError)
+      if (err instanceof Error) {
+        setErro(err.message)
+      } else {
+        setErro('Não foi possível criar a conta. Tente novamente.')
+      }
+    }
   }
 
   if (sucesso) {
@@ -35,8 +60,8 @@ export default function Cadastro() {
             <div className="success-icon">✅</div>
             <div className="title">Conta criada!</div>
             <div className="sub">Seu cadastro foi realizado com sucesso.</div>
-            <button className="btn btn-primary" onClick={() => navigate('/login')}>
-              Ir para o Login
+            <button className="btn btn-primary" onClick={() => navigate('/menu')}>
+              Ir para o Menu
             </button>
           </div>
         </div>
@@ -62,6 +87,7 @@ export default function Cadastro() {
           placeholder="👤  Nome de usuário"
           value={nome}
           onChange={e => setNome(e.target.value)}
+          disabled={isLoading}
         />
         <input
           className="field"
@@ -69,6 +95,7 @@ export default function Cadastro() {
           placeholder="📧  E-mail"
           value={email}
           onChange={e => setEmail(e.target.value)}
+          disabled={isLoading}
         />
         <input
           className="field"
@@ -76,6 +103,7 @@ export default function Cadastro() {
           placeholder="🔒  Senha"
           value={senha}
           onChange={e => setSenha(e.target.value)}
+          disabled={isLoading}
         />
         <input
           className={`field ${confirmarErro ? 'error' : ''}`}
@@ -83,12 +111,17 @@ export default function Cadastro() {
           placeholder="🔒  Confirmar senha"
           value={confirmar}
           onChange={e => { setConfirmar(e.target.value); setConfirmarErro(false) }}
+          disabled={isLoading}
         />
 
         {erro && <span className="error-msg">{erro}</span>}
 
-        <button className="btn btn-success" onClick={handleCadastro}>
-          Criar conta
+        <button
+          className="btn btn-success"
+          onClick={handleCadastro}
+          disabled={isLoading}
+        >
+          {isLoading ? 'Criando conta…' : 'Criar conta'}
         </button>
 
       </div>

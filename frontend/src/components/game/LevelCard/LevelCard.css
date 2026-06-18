@@ -1,0 +1,109 @@
+/* ── Card base — usado pelas variantes normal, upload, locked e soon ── */
+.level-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  width: 150px;
+  flex-shrink: 0;
+}
+
+.level-card:hover:not(.locked):not(.soon) {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px #7c6af720;
+}
+
+.level-card.selected {
+  border-color: var(--accent);
+  background: #7c6af711;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px #7c6af730;
+}
+
+.level-thumb {
+  height: 70px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.level-name {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.level-card.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Upload Card ── */
+.level-card.upload-card {
+  border: 2px dashed var(--border);
+  background: transparent;
+}
+
+.level-card.upload-card:hover {
+  border-color: var(--accent2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px #f0a50018;
+}
+
+.level-card.upload-card.selected {
+  border-color: var(--accent2);
+  border-style: solid;
+  background: #f0a50009;
+  box-shadow: 0 8px 28px #f0a50025;
+}
+
+.upload-card .level-thumb {
+  background: transparent;
+  font-size: 28px;
+}
+
+.upload-label {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+/* ── Em Breve Card ── */
+.level-card.soon {
+  cursor: default;
+  opacity: 0.55;
+  border-style: dashed;
+}
+
+.level-card.soon:hover {
+  border-color: var(--border);
+  transform: none;
+  box-shadow: none;
+}
+
+.soon .level-thumb {
+  background: transparent;
+  font-size: 22px;
+}
+
+/* Badge "em breve" — visualmente quase idêntico a .badge-warn (Menu.css); candidato a unificar depois. */
+.badge-soon {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  background: #f0a50018;
+  color: var(--accent2);
+  border: 1px solid #f0a50044;
+}

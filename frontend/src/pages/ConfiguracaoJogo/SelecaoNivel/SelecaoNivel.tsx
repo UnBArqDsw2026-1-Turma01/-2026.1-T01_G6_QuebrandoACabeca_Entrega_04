@@ -1,5 +1,9 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate } from 'react-router-dom'
+// frontend/src/pages/ConfiguracaoJogo/SelecaoNivel/SelecaoNivel.tsx
+import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+import { useGameContext } from '../../../context/GameContext';
+import { getLevelProgress } from '../../../api/scoreApi';
+import type { LevelProgress } from '../../../types';
 import "./SelecaoNivel.css";
 
 interface Level {
@@ -37,7 +41,7 @@ const levels: CardData[] = [
     type: "normal",
     name: "Nível 1",
     emoji: "🌅",
-    gradient: "linear-gradient(135deg,#34c98a33,#7c6af733)",
+    gradient: "linear-gradient(135deg, #34c98a33, #7c6af733)",
     badge: "★★★",
     badgeClass: "badge-success",
   },
@@ -46,7 +50,7 @@ const levels: CardData[] = [
     type: "normal",
     name: "Nível 2",
     emoji: "🏙️",
-    gradient: "linear-gradient(135deg,#7c6af733,#f0a50033)",
+    gradient: "linear-gradient(135deg, #7c6af733, #f0a50033)",
     badge: "★★☆",
     badgeClass: "badge-accent",
   },
@@ -55,117 +59,105 @@ const levels: CardData[] = [
     type: "normal",
     name: "Nível 3",
     emoji: "🌆",
-    gradient: "linear-gradient(135deg,#7c6af733,#c7050533)",
+    gradient: "linear-gradient(135deg, #7c6af733, #c7050533)",
     badge: "★☆☆",
     badgeClass: "badge-danger",
   },
-  { id: "locked", type: "locked", name: "Nível 4" },
+  {
+    id: "level4",
+    type: "normal",
+    name: "Nível 4",
+    emoji: "🌌",
+    gradient: "linear-gradient(135deg, #7c6af733, #00264d33)",
+    badge: "★☆☆",
+    badgeClass: "badge-night",
+  },
   { id: "soon", type: "soon" },
 ];
 
-interface PopupState {
-  visible: boolean;
-  left: number;
-  top: number;
-  arrowLeft: number;
-  label: string;
-  isUpload: boolean;
-}
-
-const POPUP_W = 264;
-
 const LevelSelection: React.FC = () => {
-  const navigate = useNavigate()
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [popup, setPopup] = useState<PopupState>({
-    visible: false,
-    left: 0,
-    top: 0,
-    arrowLeft: 0,
-    label: "",
-    isUpload: false,
-  });
-  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const navigate = useNavigate();
+  const { loadAndSetLevelImage, setSelectedImageBase64 } = useGameContext();
+  const [isLoading, setIsLoading] = useState<string | null>(null);
+  const [erro, setErro] = useState<string | null>(null);
+  
+  // Estado para progresso dos níveis
+  const [progress, setProgress] = useState<LevelProgress[]>([]);
+  const [loadingProgress, setLoadingProgress] = useState(true);
 
-  const positionPopup = useCallback(
-    (cardEl: HTMLDivElement, isUpload: boolean, levelName: string) => {
-      const rect = cardEl.getBoundingClientRect();
-      const margin = 10;
-      const cardCenterX = rect.left + rect.width / 2;
-      let left = cardCenterX - POPUP_W / 2;
-      left = Math.max(margin, Math.min(left, window.innerWidth - POPUP_W - margin));
-      const top = rect.bottom + 10;
-      const arrowLeft = Math.max(10, Math.min(cardCenterX - left - 6, POPUP_W - 22));
+  // Mapeia levelId (1-4) a partir do card id
+  const levelMap: Record<string, number> = {
+    level1: 1,
+    level2: 2,
+    level3: 3,
+    level4: 4,
+  };
 
-      setPopup({
-        visible: true,
-        left,
-        top,
-        arrowLeft,
-        label: isUpload ? "Pronto para enviar" : `${levelName} selecionado`,
-        isUpload,
+  // Buscar progresso ao montar
+  useEffect(() => {
+    getLevelProgress()
+      .then(data => {
+        setProgress(data);
+      })
+      .catch(err => {
+        console.error('Erro ao buscar progresso dos níveis:', err);
+        setProgress([]);
+      })
+      .finally(() => {
+        setLoadingProgress(false);
       });
-    },
-    []
-  );
-
-  const selectCard = useCallback(
-    (id: string, isUpload: boolean, levelName: string) => {
-      setSelectedId(id);
-      const cardEl = cardRefs.current.get(id);
-      if (cardEl) {
-        positionPopup(cardEl, isUpload, levelName);
-      }
-    },
-    [positionPopup]
-  );
-
-  const closePopup = useCallback(() => {
-    setSelectedId(null);
-    setPopup((p) => ({ ...p, visible: false }));
   }, []);
 
-  const handlePlay = () => {
-    if (popup.isUpload) {
-      navigate('/upload-imagem');
-    } else {
-      navigate('/selecao-dificuldade');
+  // Verifica se o nível está desbloqueado
+  const isUnlocked = (levelId: number): boolean => {
+    if (levelId === 1) return true;
+    const previous = progress.find(p => p.level_id === levelId - 1);
+    return previous?.completed === true;
+  };
+
+  // Obtém as estrelas de um nível
+  const getStarsForLevel = (levelId: number): number => {
+    const found = progress.find(p => p.level_id === levelId);
+    return found?.best_stars ?? 0;
+  };
+
+  // Renderiza string de estrelas (ex: "★★☆")
+  const renderStars = (stars: number): string => {
+    return '★'.repeat(stars) + '☆'.repeat(3 - stars);
+  };
+
+  // ── CLICK DIRETO NO NÍVEL (SEM POPUP) ──
+  const handleLevelClick = async (card: Level) => {
+    const levelNum = levelMap[card.id];
+    if (!levelNum) return;
+
+    // Verifica se o nível está desbloqueado
+    if (!isUnlocked(levelNum)) {
+      setErro(`🔒 O ${card.name} ainda está bloqueado. Complete o nível anterior primeiro.`);
+      return;
+    }
+
+    setIsLoading(card.id);
+    setErro(null);
+
+    try {
+      console.log(`🔄 Carregando nível ${levelNum}...`);
+      await loadAndSetLevelImage(levelNum);
+      console.log(`✅ Nível ${levelNum} carregado com sucesso!`);
+      
+      // Vai para a seleção de dificuldade, passando o levelId
+      navigate('/selecao-dificuldade', { state: { levelId: levelNum } });
+    } catch (error) {
+      console.error(`❌ Erro ao carregar nível ${levelNum}:`, error);
+      setErro(`⚠ Não foi possível carregar a imagem do ${card.name}. Tente novamente.`);
+      setIsLoading(null);
     }
   };
 
-  // Reposiciona ao rolar ou redimensionar
-  useEffect(() => {
-    const reposition = () => {
-      if (selectedId) {
-        const cardEl = cardRefs.current.get(selectedId);
-        if (cardEl) {
-          positionPopup(cardEl, popup.isUpload, popup.label.replace(" selecionado", ""));
-        }
-      }
-    };
-    window.addEventListener("scroll", reposition, true);
-    window.addEventListener("resize", reposition);
-    return () => {
-      window.removeEventListener("scroll", reposition, true);
-      window.removeEventListener("resize", reposition);
-    };
-  }, [selectedId, popup.isUpload, popup.label, positionPopup]);
-
-  // Fecha ao clicar fora
-  useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (!target.closest(".level-card") && !target.closest("#cardPopup")) {
-        closePopup();
-      }
-    };
-    document.addEventListener("click", handleClick);
-    return () => document.removeEventListener("click", handleClick);
-  }, [closePopup]);
-
-  const setRef = (id: string) => (el: HTMLDivElement | null) => {
-    if (el) cardRefs.current.set(id, el);
-    else cardRefs.current.delete(id);
+  // ── CLICK NO UPLOAD ──
+  const handleUploadClick = () => {
+    setSelectedImageBase64(null);
+    navigate('/upload-imagem');
   };
 
   return (
@@ -182,15 +174,29 @@ const LevelSelection: React.FC = () => {
         <main className="ls-content">
           <div className="ls-content-title">Escolha um nível para começar</div>
 
+          {erro && (
+            <div className="error-panel" style={{ 
+              marginBottom: 16, 
+              color: 'var(--danger)',
+              background: 'rgba(240, 92, 92, 0.1)',
+              padding: '12px 16px',
+              borderRadius: 8,
+              border: '1px solid var(--danger)',
+              textAlign: 'center'
+            }}>
+              {erro}
+            </div>
+          )}
+
           <div className="ls-level-grid">
             {levels.map((card) => {
+              // ── CARD DE UPLOAD ──
               if (card.type === "upload") {
                 return (
                   <div
                     key={card.id}
-                    ref={setRef(card.id)}
-                    className={`level-card upload-card${selectedId === card.id ? " selected" : ""}`}
-                    onClick={() => selectCard(card.id, true, "Imagem própria")}
+                    className="level-card upload-card"
+                    onClick={handleUploadClick}
                   >
                     <div className="level-thumb" style={{ flexDirection: "column", gap: 4 }}>
                       <span>📷</span>
@@ -202,24 +208,43 @@ const LevelSelection: React.FC = () => {
                 );
               }
 
+              // ── CARD DE NÍVEL NORMAL ──
               if (card.type === "normal") {
+                const levelNum = levelMap[card.id];
+                const unlocked = isUnlocked(levelNum);
+                const stars = getStarsForLevel(levelNum);
+                const isThisLoading = isLoading === card.id;
+                
+                const starsDisplay = loadingProgress ? '•••' : renderStars(stars);
+                const badgeText = loadingProgress ? 'Carregando...' : starsDisplay;
+
                 return (
                   <div
                     key={card.id}
-                    ref={setRef(card.id)}
-                    className={`level-card${selectedId === card.id ? " selected" : ""}`}
-                    onClick={() => selectCard(card.id, false, card.name)}
+                    className={`level-card ${unlocked ? '' : 'locked'} ${isThisLoading ? 'loading' : ''}`}
+                    onClick={() => handleLevelClick(card)}
+                    style={{ cursor: (unlocked && !isThisLoading) ? 'pointer' : (unlocked ? 'wait' : 'not-allowed') }}
                   >
-                    <div className="level-thumb" style={{ background: card.gradient }}>{card.emoji}</div>
+                    <div className="level-thumb" style={{ background: card.gradient }}>
+                      {isThisLoading ? '⏳' : (unlocked ? card.emoji : '🔒')}
+                    </div>
                     <div className="level-name">{card.name}</div>
-                    <span className={`badge ${card.badgeClass}`}>{card.badge}</span>
+                    <span className={`badge ${unlocked ? card.badgeClass : 'badge-locked'}`}>
+                      {badgeText}
+                    </span>
+                    {!unlocked && !loadingProgress && (
+                      <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>
+                        Complete o nível anterior
+                      </div>
+                    )}
                   </div>
                 );
               }
 
+              // ── CARD BLOQUEADO ──
               if (card.type === "locked") {
                 return (
-                  <div key={card.id} ref={setRef(card.id)} className="level-card locked">
+                  <div key={card.id} className="level-card locked">
                     <div className="level-thumb" style={{ background: "var(--border)" }}>🔒</div>
                     <div className="level-name">{card.name}</div>
                     <span style={{ fontSize: 10, color: "var(--muted)" }}>Bloqueado</span>
@@ -227,9 +252,10 @@ const LevelSelection: React.FC = () => {
                 );
               }
 
+              // ── CARD "EM BREVE" ──
               if (card.type === "soon") {
                 return (
-                  <div key={card.id} ref={setRef(card.id)} className="level-card soon">
+                  <div key={card.id} className="level-card soon">
                     <div className="level-thumb" style={{ flexDirection: "column", gap: 6 }}>
                       <span>🚀</span>
                       <span style={{ fontSize: 10, color: "var(--muted)" }}>Novos níveis</span>
@@ -244,24 +270,6 @@ const LevelSelection: React.FC = () => {
             })}
           </div>
         </main>
-      </div>
-
-      {/* Popup flutuante */}
-      <div
-        id="cardPopup"
-        className={`card-popup${popup.visible ? " show" : ""}`}
-        style={{ width: POPUP_W, left: popup.left, top: popup.top }}
-      >
-        <div className="popup-inner">
-          <div className="popup-arrow" style={{ left: popup.arrowLeft }} />
-          <span className="popup-label">{popup.label}</span>
-          <button
-            className={`popup-btn${popup.isUpload ? " upload" : " primary"}`}
-            onClick={handlePlay}
-          >
-            {popup.isUpload ? "📷 Usar minha imagem" : "🎮 Jogar"}
-          </button>
-        </div>
       </div>
     </div>
   );

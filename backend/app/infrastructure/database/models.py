@@ -5,11 +5,11 @@ Cada classe aqui mapeia para uma tabela no banco. Os routers/services devem
 ler e escrever através destes modelos em vez de manter dicts em memória.
 
 Tabelas:
-    User          — conta de usuário (substitui o dict _USERS do auth_router)
-    PuzzleState   — snapshot do estado atual de um quebra-cabeça em andamento
-                    (substitui o dict _PUZZLES do puzzle_router)
-    ScoreEntry    — pontuação registrada por um usuário (substitui _SCORES)
-    GameSession   — sala multiplayer (substitui _ROOMS do session_router)
+    User                  — conta de usuário
+    PuzzleState           — snapshot do estado atual de um quebra-cabeça
+    ScoreEntry            — pontuação registrada por um usuário
+    GameSession           — sala multiplayer
+    UserLevelProgress     — progresso do usuário por nível (estrelas e desbloqueio)
 """
 
 from __future__ import annotations
@@ -48,6 +48,7 @@ class User(Base):
 
     puzzles: Mapped[list["PuzzleState"]] = relationship(back_populates="owner")
     scores: Mapped[list["ScoreEntry"]] = relationship(back_populates="user")
+    level_progress: Mapped[list["UserLevelProgress"]] = relationship(back_populates="user")
 
 
 # ---------------------------------------------------------------------------
@@ -97,6 +98,14 @@ class ScoreEntry(Base):
     puzzle_id: Mapped[str] = mapped_column(String, nullable=False)
     score: Mapped[int] = mapped_column(Integer, nullable=False)
     time_seconds: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    # Novos campos para o sistema de estrelas e progressão
+    level_id: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    stars: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    hints_used: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    time_limit_on: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    shuffle_on: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+
     created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow)
 
     user: Mapped["User"] = relationship(back_populates="scores")
@@ -120,3 +129,24 @@ class GameSession(Base):
     players_json: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow)
+
+
+# ---------------------------------------------------------------------------
+# UserLevelProgress — progresso por nível (estrelas e desbloqueio)
+# ---------------------------------------------------------------------------
+
+class UserLevelProgress(Base):
+    """
+    Progresso do usuário para cada nível (1 a 4).
+    Armazena a melhor pontuação em estrelas e se o nível já foi completado.
+    """
+
+    __tablename__ = "user_level_progress"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True, default=_new_uuid)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), nullable=False)
+    level_id: Mapped[int] = mapped_column(Integer, nullable=False)          # 1 a 4
+    best_stars: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    completed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
+    user: Mapped["User"] = relationship(back_populates="level_progress")

@@ -26,7 +26,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, status
 from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy.orm import Session
 
-from infrastructure.database.models import User
+from infrastructure.database.models import User, ScoreEntry, PuzzleState, UserLevelProgress
 from infrastructure.database.session import get_db
 from core.dependencies import CurrentUser, DbSession
 
@@ -171,3 +171,20 @@ def recover_password(req: RecoverRequest, db: DbSession) -> MessageResponse:
     return MessageResponse(
         message="Se este e-mail estiver cadastrado, você receberá as instruções em breve."
     )
+
+@router.delete("/users/me", status_code=status.HTTP_204_NO_CONTENT)
+def delete_me(user: CurrentUser, db: DbSession):
+    """
+    Deleta a conta do usuário logado e todos os dados associados:
+    scores, progresso nos níveis, puzzles e o próprio usuário.
+    """
+    # Deletar scores
+    db.query(ScoreEntry).filter(ScoreEntry.user_id == user.id).delete()
+    # Deletar progresso dos níveis
+    db.query(UserLevelProgress).filter(UserLevelProgress.user_id == user.id).delete()
+    # Deletar puzzles
+    db.query(PuzzleState).filter(PuzzleState.owner_id == user.id).delete()
+    # Deletar o usuário
+    db.delete(user)
+    db.commit()
+    return None

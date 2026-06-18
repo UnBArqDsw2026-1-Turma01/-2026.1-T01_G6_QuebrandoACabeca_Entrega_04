@@ -108,6 +108,8 @@ header {
 .btn-secondary:hover { border-color: var(--accent); color: var(--text); }
 .btn-success { background: var(--success); color: #0f0f14; }
 .btn-success:hover { filter: brightness(1.1); }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { filter: brightness(1.1); }
 .btn:disabled { opacity: .35; cursor: not-allowed; pointer-events: none; }
 
 /* Badges */
@@ -120,8 +122,9 @@ header {
   font-weight: 600;
 }
 .badge-success { background: #34c98a22; color: var(--success); border: 1px solid #34c98a44; }
-.badge-accent  { background: #7c6af722; color: var(--accent);  border: 1px solid #7c6af744; }
+.badge-night  { background: #7c6af722; color: var(--accent);  border: 1px solid #7c6af744; }
 .badge-danger  { background: #f05c5c22; color: var(--danger);  border: 1px solid #f05c5c44; }
+.badge-accent   { background: #f5a80333; color: var(--accent2);  border: 1px solid #f5a80333; }
 
 /* Inputs */
 .field {
@@ -138,6 +141,64 @@ header {
 }
 .field:focus { border-color: var(--accent); }
 .field.error { border-color: var(--danger); }
+
+/* Card */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.card-interactive {
+  cursor: pointer;
+  transition: border-color .2s, transform .15s;
+}
+.card-interactive:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* Modal / Popup */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: #0f0f14cc;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 100;
+}
+.modal {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  max-width: 480px;
+  width: 100%;
+  position: relative;
+  animation: fadeUp .2s ease;
+}
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+  transition: color .15s;
+}
+.modal-close:hover { color: var(--text); }
+.modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
 
 /* Animações */
 @keyframes fadeUp {

@@ -1,8 +1,15 @@
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../../hooks/useAuth'
 import './Menu.css'
 
 export default function Menu() {
-  const navigate = useNavigate()
+  const navigate   = useNavigate()
+  const { user, logout } = useAuth()
+
+  async function handleLogout() {
+    await logout()
+    navigate('/login', { replace: true })
+  }
 
   return (
     <div className="menu-page">
@@ -13,7 +20,7 @@ export default function Menu() {
         </div>
         <div className="user-info">
           <span className="badge-success">● Online</span>
-          <span className="user-name">Olá, Lucas</span>
+          <span className="user-name">Olá, {user?.name ?? 'Jogador'}</span>
         </div>
       </header>
 
@@ -59,7 +66,7 @@ export default function Menu() {
         </nav>
 
         <div className="logout-container">
-          <div className="logout-btn" onClick={() => navigate('/login')}>
+          <div className="logout-btn" onClick={handleLogout}>
             <div className="logout-left">
               <div className="logout-icon">🚪</div>
               <div className="logout-text">
