@@ -268,6 +268,45 @@ body {
   font-size: 0.9rem;
 }
 
+/* ── TECH STACK ───────────────────────────────────── */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 680px) { .tech-grid { grid-template-columns: 1fr; } }
+
+.tech-card {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--gold);
+  padding: 1.25rem 1.5rem;
+}
+
+.tech-card-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+}
+
+.tech-card-body {
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+.tech-card-body a {
+  color: var(--accent-light);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--accent-light);
+}
+
+.tech-card-body a:hover { color: var(--gold); border-color: var(--gold); }
+
 /* ── EXECUTION ────────────────────────────────────── */
 .exec-badge {
   display: inline-flex;
@@ -290,6 +329,37 @@ body {
 }
 
 .exec-dot.active { background: var(--accent); border-color: var(--accent); }
+
+.exec-method-tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: white;
+  background: var(--accent);
+  padding: 0.25rem 0.65rem;
+  margin-left: 0.6rem;
+  vertical-align: middle;
+}
+
+.exec-method-tag.alt { background: var(--gold); }
+
+.exec-steps {
+  font-size: 0.92rem;
+  color: var(--ink-muted);
+  margin: 0.75rem 0 1rem 1.25rem;
+}
+
+.exec-steps li { margin-bottom: 0.4rem; }
+
+.exec-steps code {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  padding: 0.1rem 0.4rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+}
 
 /* ── CHANGELOG ────────────────────────────────────── */
 .changelog-table {
@@ -457,67 +527,150 @@ body {
         [[slider]](assets/Fluxo1.jpg|assets/Modelo1.jpg|assets/Modelo2.jpg|assets/Modelo3.jpg|assets/Modelo4.jpg|assets/Modelo5.jpg)
     </div>
   </div>
-<!-- EXECUÇÃO -->
-<div class="section">
-  <div class="section-label">§ 04</div>
-  <h2 class="section-title">Há Algo a Ser Executado?</h2>
-  <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;">
-    <div class="exec-badge"><span class="exec-dot active"></span> SIM</div>
-    <div class="exec-badge"><span class="exec-dot"></span> NÃO</div>
+
+  <!-- TECNOLOGIAS -->
+  <div class="section">
+    <div class="section-label">§ 04</div>
+    <h2 class="section-title">Tecnologias</h2>
+    <p style="color:var(--ink-muted);font-size:0.95rem;margin-bottom:1.5rem;">
+      O projeto é composto por dois núcleos principais, orquestrados em conjunto por meio de containers:
+    </p>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-card-title">Backend</div>
+        <div class="tech-card-body">
+          <a href="https://fastapi.tiangolo.com/" target="_blank">FastAPI</a> +
+          <a href="https://www.sqlalchemy.org/" target="_blank">SQLAlchemy</a> + SQLite,
+          escrito em <strong style="color:var(--ink);">Python 3.12</strong>
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-title">Frontend</div>
+        <div class="tech-card-body">
+          <a href="https://reactjs.org/" target="_blank">React</a> + TypeScript, com
+          <a href="https://reactrouter.com/" target="_blank">React Router</a> e CSS puro
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-title">Infraestrutura</div>
+        <div class="tech-card-body">
+          <a href="https://www.docker.com/" target="_blank">Docker</a> e
+          <a href="https://docs.docker.com/compose/" target="_blank">Docker Compose</a>
+          para orquestração e execução simplificada
+        </div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-card-title">Documentação</div>
+        <div class="tech-card-body">
+          <a href="https://docsify.js.org/" target="_blank">Docsify</a>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- FRONTEND -->
-  <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--ink);margin-bottom:0.75rem;">🎨 Frontend</h3>
-  <p style="color:var(--ink-muted);font-size:0.92rem;margin-bottom:1rem;">
-    Para executar o <strong>Frontend</strong> localmente, navegue até a pasta
-    <code>frontend</code> do repositório e execute os comandos abaixo:
-  </p>
-  <pre style="background:var(--bg-card);border:1px solid var(--rule);padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--ink);line-height:1.8;overflow-x:auto;">
+  <!-- EXECUÇÃO -->
+  <div class="section">
+    <div class="section-label">§ 05</div>
+    <h2 class="section-title">Há Algo a Ser Executado?</h2>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2rem;">
+      <div class="exec-badge"><span class="exec-dot active"></span> SIM</div>
+      <div class="exec-badge"><span class="exec-dot"></span> NÃO</div>
+    </div>
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--ink);margin-bottom:0.75rem;">
+      🐳 Com Docker <span class="exec-method-tag">recomendado</span>
+    </h3>
+    <ol class="exec-steps">
+      <li>Certifique-se de ter o <strong>Docker</strong> e o <strong>Docker Compose</strong> instalados.</li>
+      <li>Clone o repositório e acesse a pasta raiz:</li>
+    </ol>
+    <pre style="background:var(--bg-card);border:1px solid var(--rule);padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--ink);line-height:1.8;overflow-x:auto;margin-bottom:1.25rem;">
+git clone &lt;url-do-repositorio&gt;
+cd QuebraCabeca/-2026.1-T01_G6_QuebrandoACabeca_Entrega_04</pre>
+    <ol class="exec-steps" start="3">
+      <li>Crie o diretório de dados <em>(opcional, para persistência do banco)</em>:</li>
+    </ol>
+    <pre style="background:var(--bg-card);border:1px solid var(--rule);padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--ink);line-height:1.8;overflow-x:auto;margin-bottom:1.25rem;">
+mkdir -p backend/data</pre>
+    <ol class="exec-steps" start="4">
+      <li>Construa e inicie os containers:</li>
+    </ol>
+    <pre style="background:var(--bg-card);border:1px solid var(--rule);padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--ink);line-height:1.8;overflow-x:auto;margin-bottom:1.25rem;">
+docker-compose up --build</pre>
+    <p style="color:var(--ink-muted);font-size:0.92rem;margin-bottom:1.25rem;">
+      Backend disponível em <a href="http://localhost:8000" class="footer-link" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;">http://localhost:8000 ↗</a>
+      (documentação interativa em <code style="background:var(--bg-card);border:1px solid var(--rule);padding:0.1rem 0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;">/docs</code>)
+      &nbsp;·&nbsp;
+      Frontend disponível em <a href="http://localhost:3000" class="footer-link" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;">http://localhost:3000 ↗</a>
+    </p>
+    <ol class="exec-steps" start="5">
+      <li>Para parar os containers:</li>
+    </ol>
+    <pre style="background:var(--bg-card);border:1px solid var(--rule);padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--ink);line-height:1.8;overflow-x:auto;margin-bottom:1.25rem;">
+docker-compose down</pre>
+    <ol class="exec-steps" start="6">
+      <li>Para remover também os volumes (banco de dados):</li>
+    </ol>
+    <pre style="background:var(--bg-card);border:1px solid var(--rule);padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--ink);line-height:1.8;overflow-x:auto;">
+docker-compose down -v</pre>
+    <!-- DIVIDER -->
+    <hr style="border:none;border-top:1px solid var(--rule);margin:2.5rem 0;" />
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--ink);margin-bottom:1.25rem;">
+      💻 Sem Docker <span class="exec-method-tag alt">desenvolvimento local</span>
+    </h3>
+    <!-- FRONTEND -->
+    <h4 style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--ink);margin-bottom:0.75rem;">🎨 Frontend</h4>
+    <p style="color:var(--ink-muted);font-size:0.92rem;margin-bottom:1rem;">
+      Pré-requisito: <strong>Node.js 18+</strong> instalado. Navegue até a pasta
+      <code style="background:var(--bg-card);border:1px solid var(--rule);padding:0.1rem 0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;">frontend</code> do repositório e execute:
+    </p>
+    <pre style="background:var(--bg-card);border:1px solid var(--rule);padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--ink);line-height:1.8;overflow-x:auto;">
 <span style="color:var(--ink-faint)"># 1. Instalar as dependências</span>
+cd frontend
 npm install
 
 <span style="color:var(--ink-faint)"># 2. Iniciar a aplicação</span>
 npm start</pre>
-  <p style="color:var(--ink-muted);font-size:0.92rem;margin-top:1rem;margin-bottom:2rem;">
-    A aplicação estará disponível em
-    <a href="http://localhost:3000" class="footer-link" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;">http://localhost:3000 ↗</a>
-  </p>
+    <p style="color:var(--ink-muted);font-size:0.92rem;margin-top:1rem;margin-bottom:2rem;">
+      Acesse em <a href="http://localhost:3000" class="footer-link" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;">http://localhost:3000 ↗</a>.
+      O frontend espera o backend em <code style="background:var(--bg-card);border:1px solid var(--rule);padding:0.1rem 0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;">http://localhost:8000</code> por padrão —
+      para alterar, defina a variável <code style="background:var(--bg-card);border:1px solid var(--rule);padding:0.1rem 0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;">REACT_APP_API_URL</code>.
+    </p>
+    <!-- DIVIDER -->
+    <hr style="border:none;border-top:1px solid var(--rule);margin:1.5rem 0;" />
+    <!-- BACKEND -->
+    <h4 style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--ink);margin-bottom:0.75rem;">⚙️ Backend</h4>
+    <p style="color:var(--ink-muted);font-size:0.92rem;margin-bottom:1rem;">
+      Pré-requisito: <strong>Python 3.12+</strong> e <strong>pip</strong> instalados. Navegue até a pasta do backend:
+    </p>
+    <pre style="background:var(--bg-card);border:1px solid var(--rule);padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--ink);line-height:1.8;overflow-x:auto;">
+cd backend/app</pre>
+    <p style="color:var(--ink-muted);font-size:0.92rem;margin-top:1.25rem;margin-bottom:0.5rem;">
+      <strong>Ambiente virtual</strong> <em>(opcional, mas recomendado)</em>
+    </p>
+    <pre style="background:var(--bg-card);border:1px solid var(--rule);padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--ink);line-height:1.8;overflow-x:auto;">
+python -m venv venv
+source venv/bin/activate   <span style="color:var(--ink-faint)"># Linux/Mac</span>
+venv\Scripts\activate      <span style="color:var(--ink-faint)"># Windows</span></pre>
+    <p style="color:var(--ink-muted);font-size:0.92rem;margin-top:1.25rem;margin-bottom:0.5rem;">
+      <strong>Instalação das dependências</strong>
+    </p>
+    <pre style="background:var(--bg-card);border:1px solid var(--rule);padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--ink);line-height:1.8;overflow-x:auto;">
+pip install -r ../requirements.txt</pre>
+    <p style="color:var(--ink-muted);font-size:0.92rem;margin-top:1.25rem;margin-bottom:0.5rem;">
+      <strong>Diretório de dados e execução</strong>
+    </p>
+    <pre style="background:var(--bg-card);border:1px solid var(--rule);padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--ink);line-height:1.8;overflow-x:auto;">
+<span style="color:var(--ink-faint)"># Criar o diretório de dados para o banco SQLite</span>
+mkdir -p data
 
-  <!-- DIVIDER -->
-  <hr style="border:none;border-top:1px solid var(--rule);margin:1.5rem 0;" />
+<span style="color:var(--ink-faint)"># Iniciar o servidor</span>
+uvicorn main:app --reload --host 0.0.0.0 --port 8000</pre>
+    <p style="color:var(--ink-muted);font-size:0.92rem;margin-top:1rem;">
+      Backend disponível em <a href="http://localhost:8000" class="footer-link" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;">http://localhost:8000 ↗</a>
+      (documentação interativa em <code style="background:var(--bg-card);border:1px solid var(--rule);padding:0.1rem 0.4rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;">/docs</code>).
+    </p>
+  </div>
 
-  <!-- BACKEND -->
-  <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--ink);margin-bottom:0.75rem;">⚙️ Backend</h3>
-  <p style="color:var(--ink-muted);font-size:0.92rem;margin-bottom:1rem;">
-    Para executar o <strong>Backend</strong> localmente, certifique-se de ter o
-    <strong>Python 3</strong> instalado e siga os passos abaixo:
-  </p>
-
-  <p style="color:var(--ink-muted);font-size:0.92rem;margin-bottom:0.5rem;">
-    <strong>Pré-requisitos</strong>
-  </p>
-  <pre style="background:var(--bg-card);border:1px solid var(--rule);padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--ink);line-height:1.8;overflow-x:auto;">
-<span style="color:var(--ink-faint)"># Verifique se o Python 3 está instalado</span>
-python3 --version
-
-<span style="color:var(--ink-faint)"># Instale o pip caso não tenha</span>
-sudo apt install python3-pip        <span style="color:var(--ink-faint)"># Linux</span>
-brew install python                 <span style="color:var(--ink-faint)"># macOS</span></pre>
-
-   <p style="color:var(--ink-muted);font-size:0.92rem;margin-top:1rem;margin-bottom:0.5rem;">
-    <strong>Instalação e execução</strong>
-  </p>
-  <pre style="background:var(--bg-card);border:1px solid var(--rule);padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--ink);line-height:1.8;overflow-x:auto;">
-<span style="color:var(--ink-faint)"># 1. Navegue até a pasta do backend</span>
-cd src/toy/
-
-<span style="color:var(--ink-faint)"># 2. Execute o backend</span>
-python3 main.py</pre>
-  <p style="color:var(--ink-muted);font-size:0.92rem;margin-top:1rem;">
-    O servidor estará disponível conforme configurado no
-    <code>main.py</code> do projeto.
-  </p>
-</div>
   <!-- HISTÓRICO -->
   <div class="section">
     <div class="section-label">§ 06</div>
@@ -548,6 +701,13 @@ python3 main.py</pre>
         <tr>
           <td>15/06/2026</td>
           <td>Adição das imagens do DAS.</td>
+          <td>João Eduardo</td>
+        </tr>
+      </tbody>
+      <tbody>
+        <tr>
+          <td>18/06/2026</td>
+          <td>Inclusão da seção de Tecnologias e atualização das instruções de execução (Docker e desenvolvimento local).</td>
           <td>João Eduardo</td>
         </tr>
       </tbody>

@@ -2,21 +2,30 @@
 <br>
 <img src="docs/assets/icone.png" alt="Logo Quebrando A Cabeça" width="96"/>
 <br>
-🧩 Quebrando A Cabeça
 
-Transformando fotografias em experiências interativas de quebra-cabeça
+# 🧩 Quebrando A Cabeça
+
+*Transformando fotografias em experiências interativas de quebra-cabeça*
+
 </div>
 
+---
+
 ## 📌 Sobre o Projeto
-O Quebrando A Cabeça é um software desenvolvido pelo Grupo G6 com o objetivo de gerar imagens com aspecto visual de quebra-cabeça a partir de fotos fornecidas pelo usuário. Como escopo estendido, o sistema prevê um ambiente interativo para a montagem virtual dos quebra-cabeças gerados.
-O projeto é requisito de avaliação da disciplina Arquitetura & Desenho de Software (FGA0208), ofertada no semestre 2026.1 pela Faculdade de Ciências e Tecnologias (FCTE) da Universidade de Brasília (UnB), sob supervisão da Prof.ª Milene Serrano.
+
+O **Quebrando A Cabeça** é um software desenvolvido pelo Grupo G6 com o objetivo de gerar imagens com aspecto visual de quebra-cabeça a partir de fotos fornecidas pelo usuário. Como escopo estendido, o sistema prevê um ambiente interativo para a montagem virtual dos quebra-cabeças gerados.
+
+O projeto é requisito de avaliação da disciplina **Arquitetura & Desenho de Software (FGA0208)**, ofertada no semestre 2026.1 pela Faculdade de Ciências e Tecnologias (FCTE) da Universidade de Brasília (UnB), sob supervisão da **Prof.ª Milene Serrano**.
+
+---
 
 ## 👥 Equipe
+
 <table align="center">
   <tr>
     <td align="center">
       <a href="https://github.com/Dexmachi">
-        <img src="https://avatars.githubusercontent.com/u/Dexmachi" width="100" height="100" style="border-radius:50%"/><br/>
+        <img src="https://avatars.githubusercontent.com/Dexmachi" width="100" height="100" style="border-radius:50%"/><br/>
         <sub><b>Caio Rocha</b></sub>
       </a>
     </td>
@@ -55,94 +64,129 @@ O projeto é requisito de avaliação da disciplina Arquitetura & Desenho de Sof
   </tr>
 </table>
 
-## 🛠️ Tecnologia
+---
 
-A documentação é gerada com **[Docsify](https://docsify.js.org/)** — converte arquivos Markdown em site de documentação sem build, renderizando tudo diretamente no navegador.
+## 🛠️ Tecnologias
 
-### Pré-requisitos
+O projeto é composto por dois núcleos principais:
 
-> [Node.js](https://nodejs.org/) instalado na máquina.
+- **Backend**: [FastAPI](https://fastapi.tiangolo.com/) + [SQLAlchemy](https://www.sqlalchemy.org/) + SQLite, escrito em Python 3.12
+- **Frontend**: [React](https://reactjs.org/) + TypeScript, com [React Router](https://reactrouter.com/) e CSS puro
+- **Infraestrutura**: [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/) para orquestração e execução simplificada
+- **Documentação**: [Docsify](https://docsify.js.org/)
 
-### 1 · Instalar o Docsify CLI
+---
 
+## 🧩 Executando a Aplicação
+
+### Com Docker (recomendado)
+
+1. Certifique-se de ter o **Docker** e o **Docker Compose** instalados.
+
+2. Clone o repositório e acesse a pasta raiz:
 ```sh
-npm i docsify-cli -g
+git clone <url-do-repositorio>
+cd QuebraCabeca/-2026.1-T01_G6_QuebrandoACabeca_Entrega_04
 ```
 
-### 2 · Executar localmente
-
+3. Crie o diretório de dados (opcional, para persistência do banco):
 ```sh
-docsify serve ./docs
+mkdir -p backend/data
 ```
 
-Acesse em: **http://localhost:3000**
+4. Construa e inicie os containers:
+```sh
+docker-compose up --build
+```
 
-## 🧩 Executando o Frontend
+- Backend disponível em **http://localhost:8000** (docs interativos em `/docs`)
+- Frontend disponível em **http://localhost:3000**
 
-O coração interativo do projeto — a interface onde os quebra-cabeças ganham vida.
+5. Para parar os containers:
+```sh
+docker-compose down
+```
 
-### Pré-requisitos
+6. Para remover também os volumes (banco de dados):
+```sh
+docker-compose down -v
+```
 
-> [Node.js](https://nodejs.org/) instalado na máquina.
+---
 
-### 1 · Entrar na pasta do frontend
+### Sem Docker (desenvolvimento local)
+
+#### Frontend
+
+> Pré-requisito: **Node.js 18+** instalado.
 
 ```sh
 cd frontend
-```
-
-### 2 · Instalar as dependências
-
-```sh
 npm install
-```
-
-### 3 · Iniciar o servidor de desenvolvimento
-
-```sh
 npm start
 ```
 
-Acesse em: **http://localhost:3001**
+Acesse em **http://localhost:3000**.
 
-> 💡 Caso a porta `3001` já esteja em uso, o React sugerirá automaticamente a próxima disponível.
+> 💡 O frontend espera o backend em `http://localhost:8000` por padrão. Para alterar, defina a variável `REACT_APP_API_URL`.
 
-## ⚙️ Executando o Backend
+---
 
-O núcleo de processamento do projeto — responsável pela geração dos quebra-cabeças.
+#### Backend
 
-### Pré-requisitos
-
-> [Python 3](https://www.python.org/) instalado na máquina.
+> Pré-requisito: **Python 3.12+** e **pip** instalados.
 
 ```sh
-# Verifique a instalação
-python3 --version
+cd backend/app
 ```
 
-### 1 · Entrar na pasta do backend
+Criar e ativar um ambiente virtual (opcional, mas recomendado):
 
 ```sh
-cd src/toy/
+python -m venv venv
+source venv/bin/activate   # Linux/Mac
+venv\Scripts\activate      # Windows
 ```
 
-### 2 · Executar o backend
+Instalar as dependências:
 
 ```sh
-python3 main.py
+pip install -r ../requirements.txt
 ```
+
+Criar o diretório de dados para o banco SQLite:
+
+```sh
+mkdir -p data
+```
+
+Iniciar o servidor:
+
+```sh
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+Backend disponível em **http://localhost:8000** (documentação interativa em `/docs`).
+
+---
 
 ## 📜 Histórico de Versões
 
-| Versão | Data | Alterações | Autor |
-|:------:|:----:|------------|:-----:|
-| `1.0` | 08/06/2026 | Inserir o template inicial da página.          | Lucas Ricarte |
-| `1.1` | 10/06/2026 | Ajustar o template inicial da página.          | João Eduardo  |
+| Versão | Data       | Alterações                              | Autor         |
+|--------|------------|-----------------------------------------|---------------|
+| 1.0    | 08/06/2026 | Inserir o template inicial da página    | Lucas Ricarte |
+| 1.1    | 10/06/2026 | Ajustar o template inicial da página    | João Eduardo  |
+| 1.2    | 18/06/2026 | Incluir tecnologias novas               | João Eduardo  |
+
+---
 
 <div align="center">
 <br>
-Arquitetura & Desenho de Software · FGA0208 · 2026.1
+
+**Arquitetura & Desenho de Software · FGA0208 · 2026.1**
+
 Universidade de Brasília — Faculdade de Ciências e Tecnologias
-Prof.ª Milene Serrano
-<br>
+
+*Prof.ª Milene Serrano*
+
 </div>
