@@ -34,7 +34,7 @@ O sistema permite que o usuário:
 
 <p align="center">
   <video width="100%" controls>
-    <source src="../assets/Projeto.mp4" type="video/mp4">
+    <source src="./assets/Projeto.mp4" type="video/mp4">
   </video>
 </p>
 
@@ -194,8 +194,8 @@ Os logs abaixo foram capturados durante uma sessão real com `docker-compose up`
 ## 🔗 Links Úteis
 
 - [Repositório no GitHub](https://github.com/UnBArqDsw2026-1-Turma01/-2026.1-T01_G6_QuebrandoACabeca_Entrega_04)
-- [Documentação do DAS (Arquitetura)](../ArquiteturaReutilizacao/4.1.DAS.md)
-- [Documento de Reutilização](../ArquiteturaReutilizacao/4.2.ReutilizacaoDeSoftware.md)
+- [Documentação do DAS (Arquitetura)](./ArquiteturaReutilizacao/4.1.DAS.md)
+- [Documento de Reutilização](./ArquiteturaReutilizacao/4.2.ReutilizacaoDeSoftware.md)
 
 ---
 
