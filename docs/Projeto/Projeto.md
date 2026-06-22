@@ -34,7 +34,7 @@ O sistema permite que o usuário:
 
 <p align="center">
   <video width="100%" controls>
-    <source src="./assets/Projeto.mp4" type="video/mp4">
+    <source src="../assets/Projeto.mp4" type="video/mp4">
   </video>
 </p>
 
