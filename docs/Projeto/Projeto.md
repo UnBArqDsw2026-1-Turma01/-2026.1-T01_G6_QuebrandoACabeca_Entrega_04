@@ -32,11 +32,7 @@ O sistema permite que o usuário:
 
 ## 🎥 Vídeo de Demonstração
 
-<p align="center">
-  <video width="100%" controls>
-    <source src="./assets/Projeto.mp4" type="video/mp4">
-  </video>
-</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/g7OkwDFJyjY?si=A2w9stX8duz0E26t" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ---
 
