@@ -89,12 +89,7 @@ git clone <url-do-repositorio>
 cd QuebraCabeca/-2026.1-T01_G6_QuebrandoACabeca_Entrega_04
 ```
 
-3. Crie o diretório de dados (opcional, para persistência do banco):
-```sh
-mkdir -p backend/data
-```
-
-4. Construa e inicie os containers:
+3. Construa e inicie os containers:
 ```sh
 docker-compose up --build
 ```
@@ -102,12 +97,12 @@ docker-compose up --build
 - Backend disponível em **http://localhost:8000** (docs interativos em `/docs`)
 - Frontend disponível em **http://localhost:3000**
 
-5. Para parar os containers:
+4. Para parar os containers:
 ```sh
 docker-compose down
 ```
 
-6. Para remover também os volumes (banco de dados):
+5. Para remover também os volumes (banco de dados):
 ```sh
 docker-compose down -v
 ```
@@ -140,26 +135,11 @@ Acesse em **http://localhost:3000**.
 cd backend/app
 ```
 
-Criar e ativar um ambiente virtual (opcional, mas recomendado):
-
-```sh
-python -m venv venv
-source venv/bin/activate   # Linux/Mac
-venv\Scripts\activate      # Windows
-```
-
 Instalar as dependências:
 
 ```sh
 pip install -r ../requirements.txt
 ```
-
-Criar o diretório de dados para o banco SQLite:
-
-```sh
-mkdir -p data
-```
-
 Iniciar o servidor:
 
 ```sh
